@@ -51,11 +51,11 @@ module Shutterbug
       log 'do_get_png called'
       headers = {}
       sha =req.path.match(GET_PNG_REGEX)[1]
-      svg_file = @shutterbug.get_png_file(sha)
-      headers['Content-Length'] = svg_file.size.to_s
+      png_file = @shutterbug.get_png_file(sha)
+      headers['Content-Length'] = png_file.size.to_s
       headers['Content-Type']   = 'image/png'
       headers['Cache-Control']  = 'no-cache'
-      return [200, headers, svg_file]
+      return [200, headers, png_file]
     end
 
     def do_get_html(req)
