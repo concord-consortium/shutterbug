@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Shutterbug
   class Rackapp
     BASE_PATH      = "/shutterbug"
@@ -17,11 +19,11 @@ module Shutterbug
     def initialize app
       @app = app
       @shutterbug = Service.new()
-      puts "initialized"
+      log "initialized"
     end
 
     def log(string)
-      puts string
+      puts "★ shutterbug ➙ #{string}"
     end
 
     def do_convert(req)
