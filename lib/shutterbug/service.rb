@@ -1,7 +1,7 @@
 require 'stringio'
 module Shutterbug
   class Service
-    class StreamFile
+    class RackFile
       def initialize(file)
         @stream_file = file
       end
@@ -22,10 +22,10 @@ module Shutterbug
       end
     end
 
-    class PngFile  < StreamFile; end
-    class HtmlFile < StreamFile; end
+    class PngFile  < RackFile; end
+    class HtmlFile < RackFile; end
 
-    class JSFile   < StreamFile
+    class JSFile   < RackFile
       def initialize(_filename)
         @javascript = File.read(_filename).gsub(/CONVERT_PATH/,Shutterbug::Rackapp::CONVERT_PATH)
       end
@@ -80,7 +80,6 @@ module Shutterbug
         @file_cache[signature] = {'png' => PngFile.new(outfile), 'html' => HtmlFile.new(infile) }
       ensure
         infile.close
-        # infile.unlink
       end
       return signature
     end
