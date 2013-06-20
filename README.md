@@ -37,11 +37,12 @@ After adding `use Shutterbug::Rackapp` to your config.ru file, you can convert p
 
 ## TODO: ##
 
-*  Configuration of the resource paths.
-*  Fix web-font bugs.
+*  Configuration of the rack paths.
+*  Fix web-font bugs in phantom js.
 *  Better abstraction phantomjs command line invocation. Use phantomjs.rb ?
-*  Tests.
-*  Documentation.
+*  Use [sprockets](https://github.com/sstephenson/sprockets) for and coffee.erb for shutterbug.js 
+*  Write Tests.
+*  Write Documentation.
 
 ## Contributing
 
