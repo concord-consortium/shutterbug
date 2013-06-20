@@ -1,9 +1,18 @@
 module Shutterbug
   class Rackapp
-    CONVERT_PATH     = /\/convert_svg\//
-    GET_PNG_PATH     = /\/get_png\/([^\/]+)/
-    GET_HTML_PATH    = /\/get_html\/([^\/]+)/
-    SHUTTERBUG_JS    = /\/shutterbug\/shutterbug.js$/
+    BASE_PATH      = "/shutterbug"
+
+    CONVERT_PATH   = "#{BASE_PATH}/make_snapshot"
+    CONVERT_REGEX  = /#{CONVERT_PATH}/
+
+    PNG_PATH       = "#{BASE_PATH}/get_png"
+    GET_PNG_REGEX  = /#{PNG_PATH}\/([^\/]+)/
+
+    HTML_PATH      = "#{BASE_PATH}/get_html"
+    GET_HTML_REGEX = /#{HTML_PATH}\/([^\/]+)/
+
+    JS_PATH        = "#{BASE_PATH}/shutterbug.js"
+    JS_REGEX       = /#{JS_PATH}$/
 
     def initialize app
       @app = app
@@ -28,7 +37,7 @@ module Shutterbug
       log "BASE: #{base_url}"
 
       signature = @shutterbug.convert(base_url, html, css, width, height)
-      response_url = "/get_png/#{signature}"
+      response_url = "#{PNG_PATH}/#{signature}"
       response_text = "<img src='#{response_url}' alt='#{signature}'>"
       headers['Content-Length'] = response_text.size.to_s
       headers['Content-Type']   = 'text/plain'
@@ -39,7 +48,7 @@ module Shutterbug
     def do_get_png(req)
       log 'do_get_png called'
       headers = {}
-      sha =req.path.match(GET_PNG_PATH)[1]
+      sha =req.path.match(GET_PNG_REGEX)[1]
       svg_file = @shutterbug.get_png_file(sha)
       headers['Content-Length'] = svg_file.size.to_s
       headers['Content-Type']   = 'image/png'
@@ -50,7 +59,7 @@ module Shutterbug
     def do_get_html(req)
       log 'do_get_html called'
       headers = {}
-      sha =req.path.match(GET_HTML_PATH)[1]
+      sha =req.path.match(GET_HTML_REGEX)[1]
       html_file = @shutterbug.get_html_file(sha)
       headers['Content-Length'] = html_file.size.to_s
       headers['Content-Type']   = 'text/html'
@@ -75,10 +84,10 @@ module Shutterbug
 
     def call env
       req = Rack::Request.new(env)
-      return do_convert(req)  if req.path =~ CONVERT_PATH
-      return do_get_png(req)  if req.path =~ GET_PNG_PATH
-      return do_get_html(req) if req.path =~ GET_HTML_PATH
-      return do_get_shutterbug(req) if req.path =~ SHUTTERBUG_JS
+      return do_convert(req)  if req.path =~ CONVERT_REGEX
+      return do_get_png(req)  if req.path =~ GET_PNG_REGEX
+      return do_get_html(req) if req.path =~ GET_HTML_REGEX
+      return do_get_shutterbug(req) if req.path =~ JS_REGEX
       return hand_off(env)
     end
   end

@@ -1,3 +1,4 @@
+require 'stringio'
 module Shutterbug
   class Service
     class StreamFile
@@ -23,14 +24,13 @@ module Shutterbug
 
     class PngFile  < StreamFile; end
     class HtmlFile < StreamFile; end
+
     class JSFile   < StreamFile
-
       def initialize(_filename)
-        @filename = _filename
+        @javascript = File.read(_filename).gsub(/CONVERT_PATH/,Shutterbug::Rackapp::CONVERT_PATH)
       end
-
       def open
-        @stream_file = File.open(@filename)
+        @stream_file = StringIO.new(@javascript)
       end
     end
 
