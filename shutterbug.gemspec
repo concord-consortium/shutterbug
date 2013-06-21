@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   }
 
   spec.summary       = %q{ use Shutterbug::Rackapp }
-  spec.homepage      = ""
+  spec.homepage      = "http://github.com/concord-consortium/shutterbug"
   spec.license       = "MIT, Simplified BSD, Apache 2.0"
 
   spec.files         = `git ls-files`.split($/)
