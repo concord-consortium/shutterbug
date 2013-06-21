@@ -22,9 +22,6 @@ module Shutterbug
       log "initialized"
     end
 
-    def log(string)
-      puts "★ shutterbug ➙ #{string}"
-    end
 
     def do_convert(req)
       log 'do_convert called'
@@ -41,47 +38,27 @@ module Shutterbug
       signature = @shutterbug.convert(base_url, html, css, width, height)
       response_url = "#{PNG_PATH}/#{signature}"
       response_text = "<img src='#{response_url}' alt='#{signature}'>"
-      headers['Content-Length'] = response_text.size.to_s
-      headers['Content-Type']   = 'text/plain'
-      headers['Cache-Control']  = 'no-cache'
-      return [200, headers, [response_text]]
+      return good_response(response_text,'text/plain')
     end
 
     def do_get_png(req)
       log 'do_get_png called'
-      headers = {}
       sha =req.path.match(GET_PNG_REGEX)[1]
       png_file = @shutterbug.get_png_file(sha)
-      headers['Content-Length'] = png_file.size.to_s
-      headers['Content-Type']   = 'image/png'
-      headers['Cache-Control']  = 'no-cache'
-      return [200, headers, png_file]
+      good_response(png_file, 'image/png')
     end
 
     def do_get_html(req)
       log 'do_get_html called'
-      headers = {}
       sha =req.path.match(GET_HTML_REGEX)[1]
       html_file = @shutterbug.get_html_file(sha)
-      headers['Content-Length'] = html_file.size.to_s
-      headers['Content-Type']   = 'text/html'
-      headers['Cache-Control']  = 'no-cache'
-      return [200, headers, html_file]
+      good_response(html_file, 'text/html')
     end
 
     def do_get_shutterbug(req)
       log 'do_get_shutterbug called'
-      headers = {}
       shutterbug_js = @shutterbug.get_shutterbug_file
-      headers['Content-Length'] = shutterbug_js.size.to_s
-      headers['Content-Type']   = 'application/javascript'
-      headers['Cache-Control']  = 'no-cache'
-      return [200, headers, shutterbug_js]
-    end
-
-    def hand_off(env)
-      log 'calling app default'
-      @app.call env
+      good_response(shutterbug_js, 'application/javascript')
     end
 
     def call env
@@ -90,7 +67,28 @@ module Shutterbug
       return do_get_png(req)  if req.path =~ GET_PNG_REGEX
       return do_get_html(req) if req.path =~ GET_HTML_REGEX
       return do_get_shutterbug(req) if req.path =~ JS_REGEX
-      return hand_off(env)
+      return skip(env)
     end
+
+    private
+    def good_response(content, type, cache='no-cache')
+      headers = {}
+      headers['Content-Length'] = content.size.to_s
+      headers['Content-Type']   = type
+      headers['Cache-Control']  = 'no-cache'
+      # content must be enumerable.
+      content = [content] if content.kind_of? String
+      return [200, headers, content]
+    end
+
+    def log(string)
+      puts "★ shutterbug ➙ #{string}"
+    end
+
+    def skip(env)
+      log 'calling app default'
+      @app.call env
+    end
+
   end
 end
