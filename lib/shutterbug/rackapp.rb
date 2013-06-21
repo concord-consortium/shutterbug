@@ -66,7 +66,7 @@ module Shutterbug
     end
 
     def log(string)
-      puts "★ shutterbug ➙ #{string}"
+      puts "★ shutterbug #{Shutterbug::VERSION} ➙ #{string}"
     end
 
     def skip(env)
