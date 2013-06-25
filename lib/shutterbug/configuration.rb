@@ -2,9 +2,15 @@ module Shutterbug
   class Configuration
 
     attr_accessor :url_base
+    attr_accessor :resource_dir
+
+    def self.instance(opts={})
+      return @instance || @instance = self.new(opts)
+    end
 
     def initialize(opts={})
-      self.url_base = opts[:url_base] || "/shutterbug"
+      self.url_base     = opts[:url_base]     || "/shutterbug"
+      self.resource_dir = opts[:resource_dir] || Dir.tmpdir
     end
 
     def js_path

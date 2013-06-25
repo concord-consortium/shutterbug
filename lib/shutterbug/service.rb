@@ -2,7 +2,7 @@ require 'stringio'
 module Shutterbug
   class Service
 
-    def initialize(_config = Configuration.new)
+    def initialize(_config = Configuration.instance)
       @file_cache = {}
       @config = _config
       @js_file = JsFile.new()

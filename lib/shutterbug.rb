@@ -8,4 +8,8 @@ module Shutterbug
   autoload :PngFile,        "shutterbug/png_file"
   autoload :JsFile,         "shutterbug/js_file"
   autoload :PhantomJob,     "shutterbug/phantom_job"
+  def self.configure(&block)
+    conf = Configuration.instance
+    yield conf
+  end
 end

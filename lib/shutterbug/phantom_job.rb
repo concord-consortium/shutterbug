@@ -43,7 +43,7 @@ module Shutterbug
     end
 
     def base_path
-      "/tmp"
+      Configuration.instance.resource_dir
     end
 
     def infilename

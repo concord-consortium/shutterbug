@@ -3,18 +3,11 @@
 module Shutterbug
   class Rackapp
 
-    def initialize app
+    def initialize(app, _conf = Configuration.instance)
       @app = app
-      self.config= Configuration.new();
-      log "initialized"
-    end
-
-    def config=(_conf)
       @config = _conf
       @shutterbug = Service.new(@config)
-    end
-    def config
-      return @config
+      log "initialized"
     end
 
     def do_convert(req)

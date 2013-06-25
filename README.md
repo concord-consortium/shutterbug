@@ -7,6 +7,10 @@ A rack utility that will create and save images (pngs) from parts of your html's
 
 
     use Shutterbug::Rackapp
+    Shutterbug.configure do |config|
+      conf.resource_dir = '/Users/npaessel/lab/ruby/shutterbug/tmp'
+      conf.url_base = '/my_shutterbug'
+    end
 
 
 ## Installation
