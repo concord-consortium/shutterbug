@@ -46,7 +46,7 @@ describe Shutterbug::Rackapp do
     end
 
     describe "convert route" do
-      let(:path)           { Shutterbug::Rackapp::CONVERT_PATH  }
+      let(:path)           { subject.config.convert_path }
       let(:image_response) { mock :image_response               }
       it "should route #do_convert" do
         subject.should_receive(:do_convert, :with => req).and_return image_response
@@ -55,7 +55,7 @@ describe Shutterbug::Rackapp do
     end
 
     describe "get png route" do
-      let(:path) { "#{Shutterbug::Rackapp::PNG_PATH}/#{sha}" }
+      let(:path) { subject.config.png_path(sha) }
       it "should route #do_get_png" do
         service.should_receive(:get_png_file, :with => sha).and_return rackfile
         subject.call(mock).should be_happy_response('image/png')
@@ -63,7 +63,7 @@ describe Shutterbug::Rackapp do
     end
 
     describe "get html route" do
-      let(:path) { "#{Shutterbug::Rackapp::HTML_PATH}/#{sha}" }
+      let(:path) { subject.config.html_path(sha) }
       it "should route #do_get_html" do
         service.should_receive(:get_html_file, :with => sha).and_return rackfile
         subject.call(mock).should be_happy_response('text/html')
@@ -71,7 +71,7 @@ describe Shutterbug::Rackapp do
     end
 
     describe "get shutterbug javascipt route" do
-      let(:path) { "#{Shutterbug::Rackapp::JS_PATH}" }
+      let(:path) {subject.config.js_path }
       it "should route #do_get_shutterbug" do
         service.should_receive(:get_shutterbug_file).and_return rackfile
         subject.call(mock).should be_happy_response('application/javascript')

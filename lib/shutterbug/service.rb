@@ -1,87 +1,21 @@
 require 'stringio'
 module Shutterbug
   class Service
-    class RackFile
-      def initialize(file)
-        @stream_file = file
-      end
 
-      def open
-        @stream_file.open
-        @stream_file.rewind
-      end
-
-      def each(&blk)
-        @stream_file.each(&blk)
-      ensure
-        @stream_file.close
-      end
-
-      def size
-        @stream_file.size
-      end
-    end
-
-    class PngFile  < RackFile; end
-    class HtmlFile < RackFile; end
-
-    class JSFile   < RackFile
-      def initialize(_filename)
-        @javascript = File.read(_filename).gsub(/CONVERT_PATH/,Shutterbug::Rackapp::CONVERT_PATH)
-      end
-      def open
-        @stream_file = StringIO.new(@javascript)
-      end
-    end
-
-
-    PROGRAM = 'phantomjs'
-    RASTERIZE_JS  = File.join(File.dirname(__FILE__),'rasterize.js')
-    SHUTTERBUG_JS = File.join(File.dirname(__FILE__),'shutterbug.js')
-
-    def document(html, css, url_base)
-      date = Time.now.strftime("%Y-%m-%d (%I:%M%p)")
-      """
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <base href='#{url_base}'>
-          <meta content='text/html;charset=utf-8' http-equiv='Content-Type'>
-          <title>png from #{url_base} #{date}</title>
-          #{css}
-        </head>
-        <body>
-          #{html}
-        </body>
-      </html>
-      """
-    end
-
-    def initialize
+    def initialize(_config = Configuration.new)
       @file_cache = {}
-      @js_file = JSFile.new(SHUTTERBUG_JS)
+      @config = _config
+      @js_file = JsFile.new()
     end
 
     def convert(base_url, html, css="", width=1000, height=700)
-      html_content = document(html, css, base_url)
-      signature = Digest::SHA1.hexdigest(html_content)[0..10]
-      return signature if @file_cache[signature]
-
-      infile = Tempfile.new(['phantom_page','.html'])
-      infile_name = infile.path
-
-      outfile = Tempfile.new(['phantom_render','.png'])
-      outfile_name = outfile.path
-
-      begin
-        infile.write(html_content)
-        infile.rewind
-        %x[#{PROGRAM} #{RASTERIZE_JS} #{infile_name} #{outfile_name} #{width}*#{height}]
-        @file_cache[signature] = {'png' => PngFile.new(outfile), 'html' => HtmlFile.new(infile) }
-      ensure
-        infile.close
+      job = PhantomJob.new(base_url, html, css, width, height)
+      key = job.cache_key
+      unless (@file_cache[key])
+        job.rasterize
+        @file_cache[key] = {'html' => job.html_file, 'png' => job.png_file }
       end
-      return signature
+      return key
     end
 
     def get_png_file(sha)
