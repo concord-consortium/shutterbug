@@ -6,11 +6,13 @@
 A rack utility that will create and save images (pngs) from parts of your html's documents current dom. These images become available as public png resources in the rack application. Currently shutterbug supports HTML, SVG and Canvas elements.
 
 
-    use Shutterbug::Rackapp
-    Shutterbug.configure do |config|
-      conf.resource_dir = '/Users/npaessel/lab/ruby/shutterbug/tmp'
-      conf.url_base = '/my_shutterbug'
+    use Shutterbug::Rackapp do |config|
+      conf.resource_dir  = "/Users/npaessel/tmp"
+      config.uri_prefix  = "http://localhost:9292"
+      config.path_prefix = "/shutterbug"
     end
+
+Configuration options default to reasonable defaults.
 
 
 ## Installation

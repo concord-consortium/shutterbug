@@ -1,5 +1,5 @@
 module Shutterbug
-  VERSION = "0.0.5"
+  VERSION = "0.0.6"
   autoload :Service,        "shutterbug/service"
   autoload :Rackapp,        "shutterbug/rackapp"
   autoload :Configuration,  "shutterbug/configuration"
@@ -8,8 +8,4 @@ module Shutterbug
   autoload :PngFile,        "shutterbug/png_file"
   autoload :JsFile,         "shutterbug/js_file"
   autoload :PhantomJob,     "shutterbug/phantom_job"
-  def self.configure(&block)
-    conf = Configuration.instance
-    yield conf
-  end
 end

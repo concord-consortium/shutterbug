@@ -1,7 +1,8 @@
 module Shutterbug
   class Configuration
 
-    attr_accessor :url_base
+    attr_accessor :uri_prefix
+    attr_accessor :path_prefix
     attr_accessor :resource_dir
 
     def self.instance(opts={})
@@ -9,15 +10,17 @@ module Shutterbug
     end
 
     def initialize(opts={})
-      self.url_base     = opts[:url_base]     || "/shutterbug"
+      self.uri_prefix   = opts[:uri_prefix]   || ""
+      self.path_prefix  = opts[:path_prefix]  || "/shutterbug"
       self.resource_dir = opts[:resource_dir] || Dir.tmpdir
     end
 
     def js_path
-      "#{url_base}/shutterbug.js"
+      "#{uri_prefix}#{path_prefix}/shutterbug.js"
     end
+
     def js_regex
-      /#{js_path}/
+      /#{path_prefix}\/shutterbug.js/
     end
 
     def js_file
@@ -25,24 +28,24 @@ module Shutterbug
     end
 
     def convert_path
-      "#{url_base}/make_snapshot"
+      "#{uri_prefix}#{path_prefix}/make_snapshot"
     end
     def convert_regex
-      /#{convert_path}/
+      /#{path_prefix}\/make_snapshot/
     end
 
     def png_path(sha='')
-      "#{url_base}/get_png/#{sha}"
+      "#{uri_prefix}#{path_prefix}/get_png/#{sha}"
     end
     def png_regex
-      /#{png_path}([^\/]+)/
+      /#{path_prefix}\/get_png\/([^\/]+)/
     end
 
     def html_path(sha='')
-      "#{url_base}/get_html/#{sha}"
+      "#{uri_prefix}#{path_prefix}/get_html/#{sha}"
     end
     def html_regex
-      /#{html_path}([^\/]+)/
+      /#{path_prefix}\/get_html\/([^\/]+)/
     end
 
     def base_url(req)

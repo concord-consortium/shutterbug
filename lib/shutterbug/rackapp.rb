@@ -3,9 +3,10 @@
 module Shutterbug
   class Rackapp
 
-    def initialize(app, _conf = Configuration.instance)
+    def initialize(app, &block)
+      @config = Configuration.instance
+      yield @config if block_given?
       @app = app
-      @config = _conf
       @shutterbug = Service.new(@config)
       log "initialized"
     end
