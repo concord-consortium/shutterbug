@@ -7,9 +7,10 @@ A rack utility that will create and save images (pngs) from parts of your html's
 
 
     use Shutterbug::Rackapp do |config|
-      conf.resource_dir  = "/Users/npaessel/tmp"
-      config.uri_prefix  = "http://localhost:9292"
-      config.path_prefix = "/shutterbug"
+      conf.resource_dir       = "/Users/npaessel/tmp"
+      config.uri_prefix       = "http://shutterbug.herokuapp.com"
+      config.path_prefix      = "/shutterbug"
+      config.phantom_bin_path = "/app/vendor/phantomjs/bin/phantomjs"
     end
 
 Configuration options default to reasonable defaults.

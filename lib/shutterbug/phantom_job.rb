@@ -5,7 +5,7 @@ module Shutterbug
     attr_accessor :html_file
 
     def program
-      'phantomjs'
+      Configuration.instance.phantom_bin_path
     end
 
     def rasterize_js
@@ -59,7 +59,7 @@ module Shutterbug
     end
 
     def rasterize
-      infile  = File.open(infilename, 'w') do |f|
+      File.open(infilename, 'w') do |f|
         f.write(document)
       end
       rasterize_cl()

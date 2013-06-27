@@ -4,15 +4,17 @@ module Shutterbug
     attr_accessor :uri_prefix
     attr_accessor :path_prefix
     attr_accessor :resource_dir
+    attr_accessor :phantom_bin_path
 
     def self.instance(opts={})
       return @instance || @instance = self.new(opts)
     end
 
     def initialize(opts={})
-      self.uri_prefix   = opts[:uri_prefix]   || ""
-      self.path_prefix  = opts[:path_prefix]  || "/shutterbug"
-      self.resource_dir = opts[:resource_dir] || Dir.tmpdir
+      self.uri_prefix       = opts[:uri_prefix]       || ""
+      self.path_prefix      = opts[:path_prefix]      || "/shutterbug"
+      self.resource_dir     = opts[:resource_dir]     || Dir.tmpdir
+      self.phantom_bin_path = opts[:phantom_bin_path] || "phantomjs"
     end
 
     def js_path
