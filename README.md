@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/concord-consortium/shutterbug.png?branch=master)](https://travis-ci.org/concord-consortium/shutterbug)
 [![Code Climate](https://codeclimate.com/github/concord-consortium/shutterbug.png)](https://codeclimate.com/github/concord-consortium/shutterbug)
 
-A rack utility that will create and save images (pngs) from parts of your html's documents current dom. These images become available as public png resources in the rack application. Currently shutterbug supports HTML, SVG and Canvas elements.
+A rack utility that will create and save images (pngs) from parts of your html's documents current dom. These images become available as public png resources in the rack application. Currently shutterbug supports HTML, SVG and Canvas elements. Here is a sampel config.ru file:
 
 
     use Shutterbug::Rackapp do |config|
@@ -44,6 +44,42 @@ After adding `use Shutterbug::Rackapp` to your config.ru file, you can convert p
 
 1. include the following javascript in your pages:  `<script src='http://<yourhost:port>/shutterbug/shutterbug.js' type='text/javascript'></script>`
 1. Elsewhere in your javascript call `getDomSnapshot($("#sourceDomID"),$("#imageOutputDomId"));` This will replace the contents of `$("#imageOutputDomId")` with an `<img src="http://<yourhost:port>/gete_png/sha1hash>` tag which will magically spring into existance.
+
+
+## Deploying on Heroku ##
+
+To deploy on heroku, you are going to want to modify your stack following [these instructions](http://nerdery.crowdmob.com/post/33143120111/heroku-ruby-on-rails-and-phantomjs).
+
+Your app should have a config.ru that looks something like this:
+
+
+    require 'shutterbug'
+    require 'rack/cors'
+       
+    use Rack::Cors do
+      allow do
+        origins '*'
+        resource '/shutterbug/*', :headers => :any, :methods => :any
+      end
+    end
+    
+    use Shutterbug::Rackapp do |config|
+      config.uri_prefix = "http://<your app name>.herokuapp.com/"
+      config.path_prefix = "/shutterbug"
+      config.phantom_bin_path = "/app/vendor/phantomjs/bin/phantomjs"
+    end
+       
+    app = proc do |env|
+      [200, { 'Content-Type' => 'text/html' }, ['move along']]
+    end
+     
+    run app
+
+And a Procfile which looks like this:
+
+    web: bundle exec rackup config.ru -p $PORT
+
+
 
 ## TODO: ##
 
