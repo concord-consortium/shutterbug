@@ -42,9 +42,18 @@ See [LICENSE.md](license.md) for more information.
 
 After adding `use Shutterbug::Rackapp` to your config.ru file, you can convert pieces of your web-page into png images.  Just follow these steps:
 
-1. include the following javascript in your pages:  `<script src='http://<yourhost:port>/shutterbug/shutterbug.js' type='text/javascript'></script>`
-1. Elsewhere in your javascript call `getDomSnapshot($("#sourceDomID"),$("#imageOutputDomId"));` This will replace the contents of `$("#imageOutputDomId")` with an `<img src="http://<yourhost:port>/gete_png/sha1hash>` tag which will magically spring into existance.
+include the following javascript in your pages:  
+     
+     <script src='http://<yourhost:port>/shutterbug/shutterbug.js' type='text/javascript'></script>
 
+Elsewhere in your javascript, something like this:
+    
+      var shutterbug = new Shutterbug('#sourceselector', '#outselector');
+      $('#button').click(function() {
+        shutterbug.getDomSnapshot();
+      });
+
+This will replace the contents of `$("#outselector")` with an `<img src="http://<yourhost:port>/gete_png/sha1hash>` tag which will magically spring into existance.
 
 ## Deploying on Heroku ##
 
