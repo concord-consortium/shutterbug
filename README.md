@@ -48,12 +48,12 @@ include the following javascript in your pages:
 
 Elsewhere in your javascript, something like this:
     
-      var shutterbug = new Shutterbug('#sourceselector', '#outselector');
+      var shutterbug = new Shutterbug('#sourceselector', '#outselector',optCallbackFn, optIdentifier);
       $('#button').click(function() {
         shutterbug.getDomSnapshot();
       });
 
-This will replace the contents of `$("#outselector")` with an `<img src="http://<yourhost:port>/gete_png/sha1hash>` tag which will magically spring into existance.
+This will replace the contents of `$("#outselector")` with an `<img src="http://<yourhost:port>/gete_png/sha1hash>` tag which will magically spring into existance.  `optCallbackFn` is an optional callback function which will be invoked whith the `<img src=..>` tag. `optIdentifier` is useful when there are multiple snapshot buttons targetting multiple iframes, and you need to verify the destination for various snapshot window message events.
 
 ## Deploying on Heroku ##
 
