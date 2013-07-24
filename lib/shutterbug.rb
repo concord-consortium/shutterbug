@@ -1,5 +1,5 @@
 module Shutterbug
-  VERSION = "0.0.10"
+  VERSION = "0.0.11"
   autoload :Service,        "shutterbug/service"
   autoload :Rackapp,        "shutterbug/rackapp"
   autoload :Configuration,  "shutterbug/configuration"
