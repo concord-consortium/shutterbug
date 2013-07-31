@@ -55,6 +55,40 @@ Elsewhere in your javascript, something like this:
 
 This will replace the contents of `$("#outselector")` with an `<img src="http://<yourhost:port>/gete_png/sha1hash>` tag which will magically spring into existance.  `optCallbackFn` is an optional callback function which will be invoked whith the `<img src=..>` tag. `optIdentifier` is useful when there are multiple snapshot buttons targetting multiple iframes, and you need to verify the destination for various snapshot window message events.
 
+## IFrame support
+
+If the element being snapshot'd is an iframe then the iframe needs to handle a postMessage API.
+Shutterbug will run something like the following JS to get the html of the iframe
+
+    iframe.contentWindow.postMessage(JSON.stringify({
+      type: 'htmlFragRequest',
+      id: id
+    }), "*");
+
+It is passing a JSON message that specifies the 'type' of message and passes an id so the caller can match up the response.
+Currently the id will be the optIdentifier passed to the Shutterbug constructor in the parent window.
+The iframe should respond by posting back to the source window a message like:
+
+    message.source.postMessage(JSON.stringfy({
+      type:  'htmlFragResponse',
+      value: {
+        content: 'htmlContent'
+        css: '<div><link rel='stylesheet'..><style>...</style></div>',
+        width: width,
+        height: height,
+        base_url: 'url that resource urls in content and css are relative to'
+        },
+      id:    id  // id sent in in the 'htmlFragRequest'
+    }), message.origin);
+
+The `shutterbug.js` script actually adds a handler for this postMessage API when the Shutterbug constructor is called.
+So if shutterbug is included in the iframe html as described in the Usage section above, then a parent page can snapshot
+the iframe. The iframe's html doesn't need the button with a click hander because the parent window will trigger things.
+Additionally the `#outselector` in the iframe is not used.
+
+You could also reimplement this API in the html of the iframe if you'd like. However the shutterbug implementation includes
+some useful things like finding and including all the css on the page, and 'serializing' canvas elements into images.
+
 ## Deploying on Heroku ##
 
 To deploy on heroku, you are going to want to modify your stack following [these instructions](http://nerdery.crowdmob.com/post/33143120111/heroku-ruby-on-rails-and-phantomjs).
