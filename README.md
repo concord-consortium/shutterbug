@@ -36,7 +36,7 @@ Or install it yourself as:
 * [MIT](http://www.opensource.org/licenses/MIT), or
 * [Apache 2.0](http://www.opensource.org/licenses/Apache-2.0).
 
-See [LICENSE.md](license.md) for more information.
+See [LICENSE.md](LICENSE.md) for more information.
 
 ## Usage
 
