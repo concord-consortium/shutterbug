@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+  <head>
+      <title>demo</title>
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+      <script type="text/javascript" src="/shutterbug/shutterbug.js"></script>
+      <link rel="stylesheet" type="text/css" href="main.css"></link>
+      <style type="text/css">
+        #src {
+          color: red;
+        }
+      </style>
+  </head>
+
+  <body>
+    <div id="src">
+      testing..
+    </div>
+    <button class="shutterbug" data-src="#src" data-dst="#dst">Snapshot</button>
+  <div id="dst">
+  </div>
+
+  </body>
+  <script type="text/javascript">
+    $(document).ready(function(e) {
+      $("button.shutterbug").click(function(e) {
+        var target = $(e.target);
+        var src    = target.attr('data-src');
+        var dst    = target.attr('data-dst');
+        var bug    = new Shutterbug(src,dst,null,"xxyyz");
+        bug.getDomSnapshot();
+      });
+    });
+  </script>
+</html>
