@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/concord-consortium/shutterbug.png?branch=master)](https://travis-ci.org/concord-consortium/shutterbug)
 [![Code Climate](https://codeclimate.com/github/concord-consortium/shutterbug.png)](https://codeclimate.com/github/concord-consortium/shutterbug)
+[![Gem Version](https://badge.fury.io/rb/shutterbug.png)](http://badge.fury.io/rb/shutterbug)
 
 A rack utility using phantomjs that will create and save images (pngs) from parts of your html's documents current dom. These images become available as public png resources in the rack application. Currently shutterbug supports HTML, SVG and Canvas elements. Here is a sampel config.ru file:
 
@@ -135,7 +136,10 @@ And a Procfile which looks like this:
 
 ## Contributing
 
-1. Fork it
+
+2. Join the mailing list: [email](mailto:shutterbug-dev+subscribe@googlegroups.com) or [web](https://groups.google.
+2. Fork this project.
+com/forum/#!forum/shutterbug-dev)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
