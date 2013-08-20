@@ -43,12 +43,12 @@ See [LICENSE.md](LICENSE.md) for more information.
 
 After adding `use Shutterbug::Rackapp` to your config.ru file, you can convert pieces of your web-page into png images.  Just follow these steps:
 
-include the following javascript in your pages:  
-     
+include the following javascript in your pages:
+
      <script src='http://<yourhost:port>/shutterbug/shutterbug.js' type='text/javascript'></script>
 
 Elsewhere in your javascript, something like this:
-    
+
       var shutterbug = new Shutterbug('#sourceselector', '#outselector',optCallbackFn, optIdentifier);
       $('#button').click(function() {
         shutterbug.getDomSnapshot();
@@ -99,24 +99,24 @@ Your app should have a config.ru that looks something like this:
 
     require 'shutterbug'
     require 'rack/cors'
-       
+
     use Rack::Cors do
       allow do
         origins '*'
         resource '/shutterbug/*', :headers => :any, :methods => :any
       end
     end
-    
+
     use Shutterbug::Rackapp do |config|
       config.uri_prefix = "http://<your app name>.herokuapp.com/"
       config.path_prefix = "/shutterbug"
       config.phantom_bin_path = "/app/vendor/phantomjs/bin/phantomjs"
     end
-       
+
     app = proc do |env|
       [200, { 'Content-Type' => 'text/html' }, ['move along']]
     end
-     
+
     run app
 
 And a Procfile which looks like this:
@@ -130,7 +130,7 @@ And a Procfile which looks like this:
 *  Configuration of the rack paths.
 *  Fix web-font bugs in phantom js.
 *  Better abstraction phantomjs command line invocation. Use phantomjs.rb ?
-*  Use [sprockets](https://github.com/sstephenson/sprockets) for and coffee.erb for shutterbug.js 
+*  Use [sprockets](https://github.com/sstephenson/sprockets) for and coffee.erb for shutterbug.js
 *  Write Tests.
 *  Write Documentation.
 
