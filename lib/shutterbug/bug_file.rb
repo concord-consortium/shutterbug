@@ -10,11 +10,10 @@ module Shutterbug
       failed = false
       types.each do |type|
         found  = self.find(Configuration.instance.fs_path_for(sha,type))
-        failed = !found
-        results[type] = self.find(Configuration.instance.fs_path_for(sha,type))
+        return nil unless found  # short circuit, we are missing something
+        results[type] = found
       end
-      return results unless failed
-      return nil
+      return results
     end
 
     def self.find(path)

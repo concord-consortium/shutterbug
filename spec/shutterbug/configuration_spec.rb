@@ -26,6 +26,13 @@ describe Shutterbug::Configuration do
 
   subject { Shutterbug::Configuration.new(opts) }
 
+  describe "#{}fs_path_for(sha,extension)" do |variable|
+    let(:fake_sha) { "f208004"}
+    it "should return <resource_dir>/phantom_<sha>.extension" do
+      subject.fs_path_for("f208004","png").should == "resource_dir/phantom_f208004.png"
+    end
+  end
+
   describe "base_url" do
     let(:post)    { {}  }
     let(:referrer){ nil }
