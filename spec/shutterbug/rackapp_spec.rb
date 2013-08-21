@@ -5,13 +5,21 @@ RSpec::Matchers.define :be_happy_response do |filetype|
   end
 end
 
+RSpec::Matchers.define :be_redirect_response do |url|
+  match do |actual|
+    actual[0] == 200 || actual[1]["Location"] == url
+  end
+end
+
 describe Shutterbug::Rackapp do
-  let(:sha)     { "542112e"                          }
-  let(:size)    { 200                                }
-  let(:rackfile){ mock :fackfile, :size => size      }
-  let(:service) { mock :service                      }
-  let(:app)     { mock :app                          }
-  let(:config)  { Shutterbug::Configuration.instance }
+  let(:sha)       { "542112e"                          }
+  let(:size)      { 200                                }
+  let(:public_url){ false }
+  let(:rackfile)  { mock :rackfile, :size => size,
+                          :public_url => public_url    }
+  let(:service)   { mock :service                      }
+  let(:app)       { mock :app                          }
+  let(:config)    { Shutterbug::Configuration.instance }
 
   let(:post_data) do
     {
@@ -59,9 +67,18 @@ describe Shutterbug::Rackapp do
 
     describe "get png route" do
       let(:path) { config.png_path(sha) }
-      it "should route #do_get_png" do
-        service.should_receive(:get_png_file, :with => sha).and_return rackfile
-        subject.call(mock).should be_happy_response('image/png')
+      describe "with s3 redirection" do
+        let(:public_url) { "http://amazon.is.awesome/foo.png" }
+        it "should redirect someplace" do
+          service.should_receive(:get_png_file, :with => sha).and_return rackfile
+          subject.call(mock).should be_redirect_response(public_url)
+        end
+      end
+      describe "without s3 redirection" do
+        it "should route #do_get_png" do
+          service.should_receive(:get_png_file, :with => sha).and_return rackfile
+          subject.call(mock).should be_happy_response('image/png')
+        end
       end
     end
 

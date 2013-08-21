@@ -32,7 +32,7 @@ module Shutterbug
     end
 
     def self.exists?(filename)
-      self.s3_bin.files.get(filename) != nil
+      self.s3_bin.files.head(filename) != nil
     end
 
     def self.write(name, filename)
@@ -43,7 +43,6 @@ module Shutterbug
           :public => true)
       end
     end
-
 
     def self.find(path)
       self.s3_bin.files.get(path)
@@ -70,6 +69,10 @@ module Shutterbug
 
     def size
       @stream_file.content_length
+    end
+
+    def public_url
+      @stream_file.public_url
     end
   end
 end
