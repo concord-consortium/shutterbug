@@ -4,6 +4,8 @@
 [![Code Climate](https://codeclimate.com/github/concord-consortium/shutterbug.png)](https://codeclimate.com/github/concord-consortium/shutterbug)
 [![Gem Version](https://badge.fury.io/rb/shutterbug.png)](http://badge.fury.io/rb/shutterbug)
 
+## Overview ##
+
 A rack utility using phantomjs that will create and save images (pngs) from parts of your html's documents current dom. These images become available as public png resources in the rack application. Currently shutterbug supports HTML, SVG and Canvas elements. Here is a sampel config.ru file:
 
 
@@ -16,6 +18,9 @@ A rack utility using phantomjs that will create and save images (pngs) from part
 
 Configuration options default to reasonable defaults.
 
+Shutterbug is distributed as a Ruby Gem. The rack service delivers a javascript library to the browser that can send HTML fragments back to the Rack service. The Rack service generates images from these fragments using PhantomJS.  In the following image “getDomSnapshot()” triggers a request to the Shutterbug service.  The response from the POST request contains an image tag, that points to a newly created image on the server.
+
+  ![System Overview](images/shutterbug.jpg)
 
 ## Installation
 
@@ -137,7 +142,7 @@ And a Procfile which looks like this:
 ## Contributing
 
 
-2. Join the mailing list: [email](mailto:shutterbug-dev+subscribe@googlegroups.com) or [web](https://groups.google.
+2. Join the mailing list: [email](mailto:shutterbug-dev+subscribe@googlegroups.com) or [web](https://groups.google.com/forum/?hl=en#!forum/shutterbug-dev)
 2. Fork this project.
 com/forum/#!forum/shutterbug-dev)
 2. Create your feature branch (`git checkout -b my-new-feature`)
