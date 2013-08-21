@@ -39,7 +39,6 @@ describe Shutterbug::S3File do
       describe "when the file doesn't yet exist in S3"  do
         it "should return an S3 wrapped file" do
           subject.should_receive(:exists?).and_return(false)
-          subject.should_receive(:fs_path_exists?).and_return(true)
           subject.should_receive(:write).and_return(true)
           result = subject.wrap(bug_file)
           result.should_not == bug_file

@@ -1,15 +1,17 @@
-require 'aws/s3'
+require 'fog'
 module Shutterbug
   class S3File < BugFile
 
     def self.connect!
-      unless AWS::S3::Base.connected?
-        config = Configuration.instance
-        AWS::S3::Base.establish_connection!(
-          :access_key_id     => config.s3_key,
-          :secret_access_key => config.s3_secret
-        )
-      end
+      Fog::Storage.new({
+        :provider                 => 'AWS',
+        :aws_access_key_id        => Configuration.instance.s3_key,
+        :aws_secret_access_key    => Configuration.instance.s3_secret
+      })
+    end
+
+    def self.connection
+      @connection ||= self.connect!
     end
 
     def self.wrap(bug_file)
@@ -19,25 +21,32 @@ module Shutterbug
       return bug_file
     end
 
+    def self.create_bin
+      self.connection.directories.create(
+        :key    => Configuration.instance.s3_bin,
+        :public => true)
+    end
+
     def self.s3_bin
-      return Configuration.instance.s3_bin
+      @s3_bin ||= self.create_bin
     end
 
     def self.exists?(filename)
-      self.connect!
-      AWS::S3::S3Object.exists?(filename, self.s3_bin)
+      self.s3_bin.files.get(filename) != nil
     end
 
     def self.write(name, filename)
-      stream = File.open(filename)
-      self.connect!
-      AWS::S3::S3Object.store(name, stream, s3_bin)
+      if self.fs_path_exists? filename
+        self.s3_bin.files.create(
+          :key    => name,
+          :body   => File.open(filename),
+          :public => true)
+      end
     end
 
 
     def self.find(path)
-      self.new(path) if self.exists?(path)
-      return nil
+      self.s3_bin.files.get(path)
     end
 
     def self.fs_path_exists?(long_path)
@@ -47,18 +56,20 @@ module Shutterbug
     def initialize(long_path)
       @filename = File.basename(long_path)
       unless Shutterbug::S3File.exists? @filename
-        if Shutterbug::S3File.fs_path_exists? long_path
-          Shutterbug::S3File.write(@filename, long_path)
-        end
+        Shutterbug::S3File.write(@filename, long_path)
       end
     end
 
     def open
-      @stream_file  ||= AWS::S3::S3Object.find(@filename, Shutterbug::S3File.s3_bin)
+      @stream_file = Shutterbug::S3File.s3_bin.files.get(@filename)
     end
 
     def each(&blk)
-      AWS::S3::S3Object.stream(@filename, Shutterbug::S3File.s3_bin, {}, &blk)
+      yield @stream_file.body
+    end
+
+    def size
+      @stream_file.content_length
     end
   end
 end

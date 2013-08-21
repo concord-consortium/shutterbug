@@ -32,6 +32,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rack-cors"
 
   spec.add_dependency "rack"
-  spec.add_dependency "aws-s3"
+  spec.add_dependency "fog"
 
 end
