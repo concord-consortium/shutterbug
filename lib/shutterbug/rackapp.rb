@@ -28,7 +28,12 @@ module Shutterbug
       when @config.convert_regex
         do_convert(req)
       when @config.png_regex
-        good_response(@shutterbug.get_png_file($1),'image/png')
+        file = @shutterbug.get_png_file($1)
+        if (file.respond_to?(:public_url) && file.public_url)
+          redirect_s3(file)
+        else
+          good_response(file,'image/png')
+        end
       when @config.html_regex
         good_response(@shutterbug.get_html_file($1),'text/html')
       when @config.js_regex
@@ -47,6 +52,10 @@ module Shutterbug
       # content must be enumerable.
       content = [content] if content.kind_of? String
       return [200, headers, content]
+    end
+
+    def redirect_s3(s3_file)
+      return [301, {"Location" => s3_file.public_url}, []]
     end
 
     def log(string)

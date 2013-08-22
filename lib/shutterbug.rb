@@ -1,5 +1,5 @@
 module Shutterbug
-  VERSION = "0.0.11"
+  VERSION = "0.0.12"
   autoload :Service,        "shutterbug/service"
   autoload :Rackapp,        "shutterbug/rackapp"
   autoload :Configuration,  "shutterbug/configuration"
@@ -7,5 +7,6 @@ module Shutterbug
   autoload :HtmlFile,       "shutterbug/html_file"
   autoload :PngFile,        "shutterbug/png_file"
   autoload :JsFile,         "shutterbug/js_file"
+  autoload :S3File,         "shutterbug/s3_file"
   autoload :PhantomJob,     "shutterbug/phantom_job"
 end

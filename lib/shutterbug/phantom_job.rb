@@ -42,16 +42,12 @@ module Shutterbug
       """
     end
 
-    def base_path
-      Configuration.instance.resource_dir
-    end
-
     def infilename
-      File.join(base_path,"phantom_#{cache_key}.html")
+      Configuration.instance.fs_path_for(cache_key,'html')
     end
 
     def outfilename
-      File.join(base_path,"phantom_#{cache_key}.png")
+      Configuration.instance.fs_path_for(cache_key,'png')
     end
 
     def rasterize_cl
@@ -63,8 +59,8 @@ module Shutterbug
         f.write(document)
       end
       rasterize_cl()
-      self.png_file  = PngFile.new(outfilename)
-      self.html_file = HtmlFile.new(infilename)
+      self.png_file  = S3File.wrap(PngFile.new(outfilename))
+      self.html_file = S3File.wrap(HtmlFile.new(infilename))
     end
   end
 end

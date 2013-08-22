@@ -112,10 +112,16 @@ Your app should have a config.ru that looks something like this:
       end
     end
 
+    # Without a complete set of S3 credentials, Shutterbug
+    # Places images in a temporary directory where
+    # you will LOOSE your images...
     use Shutterbug::Rackapp do |config|
       config.uri_prefix = "http://<your app name>.herokuapp.com/"
       config.path_prefix = "/shutterbug"
       config.phantom_bin_path = "/app/vendor/phantomjs/bin/phantomjs"
+      # config.s3_key       = "your_S3_KEY"
+      # config.s3_secret    = "your_S3_SECRET_DONT_COMMIT_IT"
+      # config.s3_bin       = "your_S3_bucket_name"
     end
 
     app = proc do |env|

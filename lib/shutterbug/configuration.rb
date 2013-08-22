@@ -5,6 +5,10 @@ module Shutterbug
     attr_accessor :path_prefix
     attr_accessor :resource_dir
     attr_accessor :phantom_bin_path
+    attr_accessor :s3_bin
+    attr_accessor :s3_key
+    attr_accessor :s3_secret
+
 
     def self.instance(opts={})
       return @instance || @instance = self.new(opts)
@@ -15,6 +19,13 @@ module Shutterbug
       self.path_prefix      = opts[:path_prefix]      || "/shutterbug"
       self.resource_dir     = opts[:resource_dir]     || Dir.tmpdir
       self.phantom_bin_path = opts[:phantom_bin_path] || "phantomjs"
+      self.s3_bin           = opts[:s3_bin]
+      self.s3_key           = opts[:s3_key]
+      self.s3_secret        = opts[:s3_secret]
+    end
+
+    def fs_path_for(key,extension)
+      File.join(resource_dir,"phantom_#{key}.#{extension}")
     end
 
     def js_path
@@ -52,6 +63,10 @@ module Shutterbug
 
     def base_url(req)
       req.POST()['base_url'] ||  req.referrer || "#{req.scheme}://#{req.host_with_port}"
+    end
+
+    def use_s3?
+      return (self.s3_bin && self.s3_key && self.s3_secret)
     end
   end
 end
