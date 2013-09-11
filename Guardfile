@@ -7,3 +7,8 @@ guard :rspec do
   watch('spec/spec_helper.rb')  { "spec" }
 end
 
+guard 'rack', :port => 9292 do
+  watch('Gemfile.lock')
+  watch('config.ru')
+  watch(%r{^(js|lib)/.*})
+end

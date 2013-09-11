@@ -5,7 +5,7 @@ module Shutterbug
     attr_accessor :html_file
 
     def program
-      Configuration.instance.phantom_bin_path
+      @config.phantom_bin_path
     end
 
     def rasterize_js
@@ -18,6 +18,7 @@ module Shutterbug
       @css      = css
       @width    = width
       @height   = height
+      @config   = Configuration.instance
     end
 
     def cache_key
@@ -43,11 +44,19 @@ module Shutterbug
     end
 
     def infilename
-      Configuration.instance.fs_path_for(cache_key,'html')
+      @config.fs_path_for(cache_key,'html')
     end
 
     def outfilename
-      Configuration.instance.fs_path_for(cache_key,'png')
+      @config.fs_path_for(cache_key,'png')
+    end
+
+    def png_url
+      @config.png_path(cache_key)
+    end
+
+    def html_url
+      @config.html_path(cache_key)
     end
 
     def rasterize_cl
@@ -59,8 +68,8 @@ module Shutterbug
         f.write(document)
       end
       rasterize_cl()
-      self.png_file  = S3File.wrap(PngFile.new(outfilename))
-      self.html_file = S3File.wrap(HtmlFile.new(infilename))
+      self.png_file  = @config.handler_for('png').new(outfilename)
+      self.html_file = @config.handler_for('html').new(infilename)
     end
   end
 end

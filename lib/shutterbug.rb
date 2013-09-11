@@ -3,10 +3,11 @@ module Shutterbug
   autoload :Service,        "shutterbug/service"
   autoload :Rackapp,        "shutterbug/rackapp"
   autoload :Configuration,  "shutterbug/configuration"
-  autoload :BugFile,        "shutterbug/bug_file"
+  autoload :Storage,        "shutterbug/storage"
   autoload :HtmlFile,       "shutterbug/html_file"
   autoload :PngFile,        "shutterbug/png_file"
   autoload :JsFile,         "shutterbug/js_file"
   autoload :S3File,         "shutterbug/s3_file"
   autoload :PhantomJob,     "shutterbug/phantom_job"
+  autoload :CacheManager,   "shutterbug/cache_manager"
 end

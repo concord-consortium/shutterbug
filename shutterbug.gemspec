@@ -30,6 +30,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "guard-rspec"
   spec.add_development_dependency "rack-cors"
+  spec.add_development_dependency "guard-rack"
 
   spec.add_dependency "rack"
   spec.add_dependency "fog"

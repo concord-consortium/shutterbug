@@ -1,6 +1,6 @@
 require 'fog'
 module Shutterbug
-  class S3File < BugFile
+  class S3File
 
     def self.connect!
       Fog::Storage.new({

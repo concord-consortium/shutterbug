@@ -8,7 +8,8 @@ module Shutterbug
     attr_accessor :s3_bin
     attr_accessor :s3_key
     attr_accessor :s3_secret
-
+    attr_accessor :cache_manager
+    attr_accessor :storage
 
     def self.instance(opts={})
       return @instance || @instance = self.new(opts)
@@ -22,6 +23,12 @@ module Shutterbug
       self.s3_bin           = opts[:s3_bin]
       self.s3_key           = opts[:s3_key]
       self.s3_secret        = opts[:s3_secret]
+      self.cache_manager    = opts[:cache_manager]    || Shutterbug::CacheManager::NoCache.new
+      self.storage          = Storage::FileStorage
+    end
+
+    def handler_for(type)
+      self.storage.handler_for(type)
     end
 
     def fs_path_for(key,extension)
@@ -43,13 +50,19 @@ module Shutterbug
     def convert_path
       "#{uri_prefix}#{path_prefix}/make_snapshot"
     end
+
     def convert_regex
       /#{path_prefix}\/make_snapshot/
     end
 
     def png_path(sha='')
-      "#{uri_prefix}#{path_prefix}/get_png/#{sha}"
+      entry = cache_manager.find(sha)
+      if (entry && entry.respond_to?(:public_url))
+        return entry.public_url
+      end
+      return "#{uri_prefix}#{path_prefix}/get_png/#{sha}"
     end
+
     def png_regex
       /#{path_prefix}\/get_png\/([^\/]+)/
     end
@@ -57,6 +70,7 @@ module Shutterbug
     def html_path(sha='')
       "#{uri_prefix}#{path_prefix}/get_html/#{sha}"
     end
+
     def html_regex
       /#{path_prefix}\/get_html\/([^\/]+)/
     end
