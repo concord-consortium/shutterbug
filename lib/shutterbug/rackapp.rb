@@ -37,10 +37,11 @@ module Shutterbug
       result || skip(env)
     end
 
-    def good_response(content, type)
+    def good_response(content, type, cachable=true)
       headers = {}
       headers['Content-Length'] = content.size.to_s
       headers['Content-Type']   = type
+      headers['Cache-Control']  = 'no-cache' unless cachable
       # content must be enumerable.
       content = [content] if content.kind_of? String
       return [200, headers, content]
