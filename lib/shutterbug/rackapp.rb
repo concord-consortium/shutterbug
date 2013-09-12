@@ -21,8 +21,8 @@ module Shutterbug
       @config = Configuration.instance
       yield @config if block_given?
       @app = app
-      @shutterbug = Service.new(@config)
-      @js_file = JsFile.new()
+      ConvertHandler.new(@config)
+      JsFileHandler.new()
       log "initialized"
     end
 

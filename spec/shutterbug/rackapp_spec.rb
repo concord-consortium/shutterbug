@@ -34,7 +34,7 @@ describe Shutterbug::Rackapp do
   subject { Shutterbug::Rackapp.new(app) }
 
   before(:each) do
-    Shutterbug::Service.stub!(:new => service)
+    Shutterbug::ConvertHandler.stub!(:new => service)
   end
 
   describe "#do_convert" do
