@@ -1,13 +1,13 @@
 # encoding: utf-8
-
 module Shutterbug
   class Rackapp
 
     class << self
       attr_accessor :handlers
-      def add_handler(regex, &block)
-        log "adding handler for #{regex}"
-        self.handlers[regex] = block
+      def add_handler(klass)
+        instance = klass.new(Configuration.instance)
+        log "adding handler for #{instance.regex} ➙ #{klass.name}"
+        self.handlers[instance.regex] = instance
       end
 
       def log(string)
@@ -21,8 +21,13 @@ module Shutterbug
       @config = Configuration.instance
       yield @config if block_given?
       @app = app
-      ConvertHandler.new(@config)
-      JsFileHandler.new()
+      [
+        Shutterbug::Handlers::ConvertHandler ,
+        Shutterbug::Handlers::JsFileHandler,
+        Shutterbug::Handlers::FileHandlers::PngFile,
+        Shutterbug::Handlers::FileHandlers::HtmlFile
+      ].each { |h| Rackapp.add_handler(h) }
+
       log "initialized"
     end
 
@@ -31,7 +36,7 @@ module Shutterbug
       result   = false
       Rackapp.handlers.keys.each do |path_regex|
         if req.path =~ path_regex
-          result = Rackapp.handlers[path_regex].call(self, req, env)
+          result = Rackapp.handlers[path_regex].handle(self, req, env)
         end
       end
       result || skip(env)
@@ -47,9 +52,6 @@ module Shutterbug
       return [200, headers, content]
     end
 
-    def redirect_s3(s3_file)
-      return [301, {"Location" => s3_file.public_url}, []]
-    end
 
     def log(info)
       self.class.log(info)

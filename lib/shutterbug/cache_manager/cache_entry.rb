@@ -2,18 +2,17 @@ module Shutterbug
   module CacheManager
     class CacheEntry
       attr_accessor :key
-      attr_accessor :html
-      attr_accessor :png
+      attr_accessor :url
+      attr_accessor :preview_url
 
-      def initialize(job)
-        @urls = {}
-        job && @key  = job.cache_key
-        job && @html = job.html_url
-        job && @png  = job.png_url
+      def initialize(storage)
+        @key = storage.filename
+        @url = storage.url
+        @preview_url = storage.url
       end
 
       def image_tag
-        "<img src='#{self.png}' alt='#{self.key}'>"
+        "<img src='#{self.preview_url}' alt='#{self.preview_url}'>"
       end
     end
   end

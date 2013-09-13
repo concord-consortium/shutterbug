@@ -1,3 +1,4 @@
+require 'tmpdir'
 module Shutterbug
   class Configuration
 
@@ -24,55 +25,19 @@ module Shutterbug
       self.s3_key           = opts[:s3_key]
       self.s3_secret        = opts[:s3_secret]
       self.cache_manager    = opts[:cache_manager]    || Shutterbug::CacheManager::NoCache.new
-      self.storage          = Storage::FileStorage
+      self.storage          = Storage::S3Storage
     end
 
-    def handler_for(type)
-      self.storage.handler_for(type)
+    def fs_path_for(filename)
+      File.join(resource_dir,"phantom_#{filename}")
     end
 
-    def fs_path_for(key,extension)
-      File.join(resource_dir,"phantom_#{key}.#{extension}")
-    end
-
-    def js_path
-      "#{uri_prefix}#{path_prefix}/shutterbug.js"
-    end
-
-    def js_regex
-      /#{path_prefix}\/shutterbug.js/
-    end
-
-    def js_file
-      File.join(File.dirname(__FILE__),"shutterbug.js")
+    def url_prefix
+      "#{uri_prefix}#{path_prefix}"
     end
 
     def convert_path
-      "#{uri_prefix}#{path_prefix}/make_snapshot"
-    end
-
-    def convert_regex
-      /#{path_prefix}\/make_snapshot/
-    end
-
-    def png_path(sha='')
-      entry = cache_manager.find(sha)
-      if (entry && entry.respond_to?(:public_url))
-        return entry.public_url
-      end
-      return "#{uri_prefix}#{path_prefix}/get_png/#{sha}"
-    end
-
-    def png_regex
-      /#{path_prefix}\/get_png\/([^\/]+)/
-    end
-
-    def html_path(sha='')
-      "#{uri_prefix}#{path_prefix}/get_html/#{sha}"
-    end
-
-    def html_regex
-      /#{path_prefix}\/get_html\/([^\/]+)/
+      "#{url_prefix}/make_snapshot"
     end
 
     def base_url(req)

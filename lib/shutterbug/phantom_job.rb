@@ -22,7 +22,7 @@ module Shutterbug
     end
 
     def cache_key
-      return @key || @key = Digest::SHA1.hexdigest("#{@html}#{@css}#{@base_url}")[0..10]
+      @cache_key ||= Digest::SHA1.hexdigest("#{@html}#{@css}#{@base_url}")[0..10]
     end
 
     def document
@@ -43,33 +43,33 @@ module Shutterbug
       """
     end
 
-    def infilename
-      @config.fs_path_for(cache_key,'html')
+    def html_file_name
+      "#{cache_key}.html"
     end
 
-    def outfilename
-      @config.fs_path_for(cache_key,'png')
+    def png_file_name
+      "#{cache_key}.png"
     end
 
-    def png_url
-      @config.png_path(cache_key)
+    def input_path
+      @config.fs_path_for(html_file_name)
     end
 
-    def html_url
-      @config.html_path(cache_key)
+    def output_path
+      @config.fs_path_for(png_file_name)
     end
 
     def rasterize_cl
-      %x[#{self.program} #{self.rasterize_js} #{self.infilename} #{self.outfilename} #{@width}*#{@height}]
+      %x[#{self.program} #{self.rasterize_js} #{self.input_path} #{self.output_path} #{@width}*#{@height}]
     end
 
     def rasterize
-      File.open(infilename, 'w') do |f|
+      File.open(input_path, 'w') do |f|
         f.write(document)
       end
       rasterize_cl()
-      self.png_file  = @config.handler_for('png').new(outfilename)
-      self.html_file = @config.handler_for('html').new(infilename)
+      self.png_file  = @config.storage.new(png_file_name, Shutterbug::Handlers::FileHandlers::PngFile.new)
+      self.html_file = @config.storage.new(html_file_name,  Shutterbug::Handlers::FileHandlers::HtmlFile.new)
     end
   end
 end

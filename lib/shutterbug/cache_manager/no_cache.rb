@@ -10,9 +10,8 @@ module Shutterbug
         return @entries[key]
       end
 
-      def add_job(job)
-        new_entry = Shutterbug::CacheManager::CacheEntry.new(job)
-        @entries[new_entry.key] = new_entry
+      def add_entry(cache_entry)
+        @entries[cache_entry.key] = cache_entry
       end
 
     end
