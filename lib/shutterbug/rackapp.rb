@@ -44,7 +44,7 @@ module Shutterbug
 
     def good_response(content, type, cachable=true)
       headers = {}
-      headers['Content-Length'] = content.size.to_s
+      headers['Content-Length'] = content.bytesize.to_s
       headers['Content-Type']   = type
       headers['Cache-Control']  = 'no-cache' unless cachable
       # content must be enumerable.
