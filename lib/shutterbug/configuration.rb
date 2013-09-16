@@ -25,7 +25,7 @@ module Shutterbug
       self.s3_key           = opts[:s3_key]
       self.s3_secret        = opts[:s3_secret]
       self.cache_manager    = opts[:cache_manager]    || Shutterbug::CacheManager::NoCache.new
-      self.storage          = Storage::S3Storage
+      self.storage          = use_s3? ? Storage::S3Storage : Storage::FileStorage
     end
 
     def fs_path_for(filename)
