@@ -26,10 +26,9 @@ describe Shutterbug::Configuration do
 
   subject { Shutterbug::Configuration.new(opts) }
 
-  describe "#{}fs_path_for(sha,extension)" do |variable|
-    let(:fake_sha) { "f208004"}
+  describe "#fs_path_for(filename)" do |variable|
     it "should return <resource_dir>/phantom_<sha>.extension" do
-      subject.fs_path_for("f208004","png").should == "resource_dir/phantom_f208004.png"
+      subject.fs_path_for("f208004.png").should == "resource_dir/phantom_f208004.png"
     end
   end
 
@@ -58,31 +57,6 @@ describe Shutterbug::Configuration do
   end
 
 
-  describe "file paths" do
-    it "should have a valid js_path pointing to shutterbug" do
-      subject.js_path.should == "http://blah.com//shutterbug/shutterbug.js"
-    end
-
-    it "should have a valid convert_path" do
-      subject.convert_path.should == "http://blah.com//shutterbug/make_snapshot"
-    end
-
-    it "should resolve requests for pngs" do
-      subject.png_path('xxx').should == "http://blah.com//shutterbug/get_png/xxx"
-    end
-
-    it "should resolve requests for html" do
-      subject.html_path('xxx').should == "http://blah.com//shutterbug/get_html/xxx"
-    end
-  end
-
-  describe "regular expressions" do
-    # def js_regex
-    # def convert_regex
-    # def png_regex
-    # def html_regex
-    pending "do we want to test the regexp patterns?"
-  end
 
   describe "use_s3?" do
     describe "with no S3 information" do
