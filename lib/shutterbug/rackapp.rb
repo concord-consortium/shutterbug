@@ -57,7 +57,7 @@ module Shutterbug
 
     def skip(env)
       # call the applicaiton default
-      @app.call env
+      @app.call env if @app
     end
 
   end
