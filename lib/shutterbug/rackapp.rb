@@ -2,41 +2,39 @@
 module Shutterbug
   class Rackapp
 
-    class << self
-      attr_accessor :handlers
-      def add_handler(klass)
-        instance = klass.new(Configuration.instance)
-        log "adding handler for #{instance.regex} ➙ #{klass.name}"
-        self.handlers[instance.regex] = instance
-      end
+    DefaultHandlers = [
+      Shutterbug::Handlers::ConvertHandler ,
+      Shutterbug::Handlers::JsFileHandler,
+      Shutterbug::Handlers::FileHandlers::PngFile,
+      Shutterbug::Handlers::FileHandlers::HtmlFile
+    ]
 
-      def log(string)
-        puts "★ shutterbug #{Shutterbug::VERSION} ➙ #{string}"
-      end
+    attr_accessor :handlers
+    def add_handler(klass)
+      instance = klass.new(@config)
+      log "adding handler for #{instance.regex} ➙ #{klass.name}"
+      self.handlers[instance.regex] = instance
     end
 
-    self.handlers = {}
+    def add_default_handlers
+      DefaultHandlers.each { |h| add_handler(h) }
+    end
 
-    def initialize(app, &block)
+    def initialize(app=nil, &block)
+      @handlers = {}
       @config = Configuration.instance
       yield @config if block_given?
       @app = app
-      [
-        Shutterbug::Handlers::ConvertHandler ,
-        Shutterbug::Handlers::JsFileHandler,
-        Shutterbug::Handlers::FileHandlers::PngFile,
-        Shutterbug::Handlers::FileHandlers::HtmlFile
-      ].each { |h| Rackapp.add_handler(h) }
-
+      add_default_handlers
       log "initialized"
     end
 
     def call env
       req      = Rack::Request.new(env)
       result   = false
-      Rackapp.handlers.keys.each do |path_regex|
+      handlers.keys.each do |path_regex|
         if req.path =~ path_regex
-          result = Rackapp.handlers[path_regex].handle(self, req, env)
+          result = handlers[path_regex].handle(self, req, env)
         end
       end
       result || skip(env)
@@ -52,9 +50,8 @@ module Shutterbug
       return [200, headers, content]
     end
 
-
-    def log(info)
-      self.class.log(info)
+    def log(string)
+      puts "★ shutterbug #{Shutterbug::VERSION} ➙ #{string}"
     end
 
     def skip(env)
