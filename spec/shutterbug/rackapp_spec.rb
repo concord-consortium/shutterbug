@@ -1,4 +1,6 @@
 require 'rack'
+require 'rack/test'
+
 RSpec::Matchers.define :be_happy_response do |filetype|
   match do |actual|
     actual[0] == 200 || actual[3] == filetype
@@ -12,13 +14,8 @@ RSpec::Matchers.define :be_redirect_response do |url|
 end
 
 describe Shutterbug::Rackapp do
-  let(:sha)       { "542112e"                          }
-  let(:size)      { 200                                }
-  let(:public_url){ false }
-  let(:rackfile)  { mock :rackfile, :size => size,
-                          :public_url => public_url    }
-  let(:service)   { mock :service                      }
-  let(:app)       { mock :app                          }
+  include Rack::Test::Methods
+
   let(:config)    { Shutterbug::Configuration.instance }
 
   let(:post_data) do
@@ -31,70 +28,64 @@ describe Shutterbug::Rackapp do
     }
   end
 
-  subject { Shutterbug::Rackapp.new(app) }
+  let(:app) do
+    Shutterbug::Rackapp.new  do |config|
+      config.uri_prefix   = "http://localhost:9292"
+      config.path_prefix  = "/shutterbug"
+    end
+  end
+
+  let(:filename)  { "filename" }
+  let(:url)       { "url_to_file" }
+
+  let(:mock_file)  do
+    mock({
+      :get_content => "content",
+      :filename => filename,
+      :url => url
+    })
+  end
+
+  let(:test_storage) { mock({ :new => mock_file         })}
 
   before(:each) do
-    Shutterbug::ConvertHandler.stub!(:new => service)
+    config.stub!(:storage => test_storage)
   end
 
-  describe "#do_convert" do
-    let(:req)       { mock :req, :POST => post_data}
-    it "should return a valid image url" do
-      service.should_receive(:convert).and_return(sha)
-      (resp_code,headers,content) = subject.do_convert(req)
-      resp_code.should == 200
-      headers['Content-Type'].should == 'text/plain'
-      content[0].should match /^<img src='[^']+'[^>]+>$/
-      headers['Content-Length'].should == content[0].size.to_s
-    end
-  end
+  describe "routing requests in #call" do
 
-  describe "rounting requests in #call" do
-    let(:path) { 'bogus'                   }
-    let(:req)  { mock(:req, :path => path) }
-    before(:each) do
-      Rack::Request.stub!(:new).and_return(req)
-    end
-
-    describe "convert route" do
-      let(:path)           { config.convert_path    }
-      let(:image_response) { mock :image_response               }
-      it "should route #do_convert" do
-        subject.should_receive(:do_convert, :with => req).and_return image_response
-        subject.call(mock).should == image_response
+    describe "do_convert route" do
+      it "should return a valid image url" do
+        get "/shutterbug/make_snapshot/", post_data
+        last_response.should be_ok
+        last_response.headers['Content-Type'].should match 'text/plain'
+        last_response.body.should match(/^<img src='url_to_file'[^>]+>$/)
       end
     end
 
     describe "get png route" do
-      let(:path) { config.png_path(sha) }
-      describe "with s3 redirection" do
-        let(:public_url) { "http://amazon.is.awesome/foo.png" }
-        it "should redirect someplace" do
-          service.should_receive(:get_png_file, :with => sha).and_return rackfile
-          subject.call(mock).should be_redirect_response(public_url)
-        end
-      end
-      describe "without s3 redirection" do
-        it "should route #do_get_png" do
-          service.should_receive(:get_png_file, :with => sha).and_return rackfile
-          subject.call(mock).should be_happy_response('image/png')
-        end
+      it "should route #do_get_png" do
+        Shutterbug::Configuration.instance.stub!(:storage => test_storage)
+        get "/shutterbug/get_png/filename.png"
+        last_response.should be_ok
+        last_response.headers['Content-Type'].should match 'image/png'
       end
     end
 
     describe "get html route" do
-      let(:path) { config.html_path(sha) }
       it "should route #do_get_html" do
-        service.should_receive(:get_html_file, :with => sha).and_return rackfile
-        subject.call(mock).should be_happy_response('text/html')
+
+        get "/shutterbug/get_html/filename.html"
+        last_response.should be_ok
+        last_response.headers['Content-Type'].should match 'text/html'
       end
     end
 
-    describe "get shutterbug javascipt route" do
-      let(:path) { config.js_path }
+    describe "get shutterbug.js javascipt route" do
       it "should route #do_get_shutterbug" do
-        service.should_receive(:get_shutterbug_file).and_return rackfile
-        subject.call(mock).should be_happy_response('application/javascript')
+        get "/shutterbug/shutterbug.js"
+        last_response.should be_ok
+        last_response.headers['Content-Type'].should match 'application/javascript'
       end
     end
 
