@@ -10,7 +10,6 @@ module Shutterbug
     attr_accessor :s3_key
     attr_accessor :s3_secret
     attr_accessor :cache_manager
-    attr_accessor :storage
 
     def self.instance(opts={})
       return @instance || @instance = self.new(opts)
@@ -25,7 +24,6 @@ module Shutterbug
       self.s3_key           = opts[:s3_key]
       self.s3_secret        = opts[:s3_secret]
       self.cache_manager    = opts[:cache_manager]    || Shutterbug::CacheManager::NoCache.new
-      self.storage          = use_s3? ? Storage::S3Storage : Storage::FileStorage
     end
 
     def fs_path_for(filename)
@@ -42,6 +40,10 @@ module Shutterbug
 
     def base_url(req)
       req.POST()['base_url'] ||  req.referrer || "#{req.scheme}://#{req.host_with_port}"
+    end
+
+    def storage
+      use_s3? ? Storage::S3Storage : Storage::FileStorage
     end
 
     def use_s3?
