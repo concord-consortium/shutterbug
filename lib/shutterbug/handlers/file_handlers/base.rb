@@ -14,7 +14,7 @@ module Shutterbug
         end
 
         def urlify(name)
-          "#{self.path_prefix}/#{name}"
+          "#{self.config.uri_prefix}#{self.path_prefix}/#{name}"
         end
 
         def path_prefix
