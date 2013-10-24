@@ -6,7 +6,7 @@
 
 ## Overview ##
 
-A rack utility using phantomjs that will create and save images (pngs) from parts of your html's documents current dom. These images become available as public png resources in the rack application. Currently shutterbug supports HTML, SVG and Canvas elements. Here is a sampel config.ru file:
+A rack utility using phantomjs that will create and save images (pngs) from parts of your html's documents current dom. These images become available as public png resources in the rack application. Currently shutterbug supports HTML, SVG and Canvas elements. Here is a sample config.ru file:
 
 
     use Shutterbug::Rackapp do |config|
@@ -48,7 +48,7 @@ See [LICENSE.md](LICENSE.md) for more information.
 
 After adding `use Shutterbug::Rackapp` to your config.ru file, you can convert pieces of your web-page into png images.  Just follow these steps:
 
-include the following javascript in your pages:
+Include the following javascript in your pages:
 
      <script src='http://<yourhost:port>/shutterbug/shutterbug.js' type='text/javascript'></script>
 
@@ -59,7 +59,7 @@ Elsewhere in your javascript, something like this:
         shutterbug.getDomSnapshot();
       });
 
-This will replace the contents of `$("#outselector")` with an `<img src="http://<yourhost:port>/gete_png/sha1hash>` tag which will magically spring into existance.  `optCallbackFn` is an optional callback function which will be invoked whith the `<img src=..>` tag. `optIdentifier` is useful when there are multiple snapshot buttons targetting multiple iframes, and you need to verify the destination for various snapshot window message events.
+This will replace the contents of `$("#outselector")` with an `<img src="http://<yourhost:port>/gete_png/sha1hash>` tag which will magically spring into existance.  `optCallbackFn` is an optional callback function which will be invoked with the `<img src=..>` tag. `optIdentifier` is useful when there are multiple snapshot buttons targetting multiple iframes, and you need to verify the destination for various snapshot window message events.
 
 ## IFrame support
 
@@ -114,7 +114,7 @@ Your app should have a config.ru that looks something like this:
 
     # Without a complete set of S3 credentials, Shutterbug
     # Places images in a temporary directory where
-    # you will LOOSE your images...
+    # you will LOSE your images...
     use Shutterbug::Rackapp do |config|
       config.uri_prefix = "http://<your app name>.herokuapp.com/"
       config.path_prefix = "/shutterbug"
@@ -150,10 +150,9 @@ And a Procfile which looks like this:
 
 2. Join the mailing list: [email](mailto:shutterbug-dev+subscribe@googlegroups.com) or [web](https://groups.google.com/forum/?hl=en#!forum/shutterbug-dev)
 2. Fork this project.
-com/forum/#!forum/shutterbug-dev)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-© 2013 The concord Consortium.
+© 2013 The Concord Consortium.
