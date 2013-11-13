@@ -22,6 +22,12 @@ Shutterbug is distributed as a Ruby Gem. The rack service delivers a javascript 
 
   ![System Overview](images/shutterbug.jpg)
 
+## Requirements & Dependencies
+
+  * shutterbug.js requires [JQuery](http://jquery.com/), and expects JQuery to be found via window.$ . Note that shutterbug will allow you to pass in JQuery through its constructor too, in the event that its not at window.$
+  * Ruby 1.9x or greater is required to run the Rack application.
+  * [PhantomJS](http://phantomjs.org/) is requird to run the Rack application.
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -61,7 +67,10 @@ Elsewhere in your javascript, something like this:
 
 This will replace the contents of `$("#outselector")` with an `<img src="http://<yourhost:port>/gete_png/sha1hash>` tag which will magically spring into existance.  `optCallbackFn` is an optional callback function which will be invoked with the `<img src=..>` tag. `optIdentifier` is useful when there are multiple snapshot buttons targetting multiple iframes, and you need to verify the destination for various snapshot window message events.
 
-## IFrame support
+## Advanced usage
+
+
+### IFrame support
 
 If the element being snapshot'd is an iframe then the iframe needs to handle a postMessage API.
 Shutterbug will run something like the following JS to get the html of the iframe
@@ -95,7 +104,15 @@ Additionally the `#outselector` in the iframe is not used.
 You could also reimplement this API in the html of the iframe if you'd like. However the shutterbug implementation includes
 some useful things like finding and including all the css on the page, and 'serializing' canvas elements into images.
 
-## Deploying on Heroku ##
+### Shutterbug JQuery custom events ###
+
+Shutterbug emits a jQuery custom event called 'shutterbug-saycheese' just prior to copying styles, elements, and canvas contents to the document fragment. This allows applications to do any preparation required before they are ready to be snapshotted.
+
+After all elements are copied, emits a 'shutterbug-asyouwere' event, so that any customized preperations can be torn down again.
+
+After all elements are copied, emits a 'shutterbug-asyouwere' event.
+
+### Deploying on Heroku ###
 
 To deploy on heroku, you are going to want to modify your stack following [these instructions](http://nerdery.crowdmob.com/post/33143120111/heroku-ruby-on-rails-and-phantomjs).
 
@@ -143,10 +160,9 @@ And a Procfile which looks like this:
 *  Better abstraction phantomjs command line invocation. Use phantomjs.rb ?
 *  Use [sprockets](https://github.com/sstephenson/sprockets) for and coffee.erb for shutterbug.js
 *  Write Tests.
-*  Write Documentation.
+
 
 ## Contributing
-
 
 2. Join the mailing list: [email](mailto:shutterbug-dev+subscribe@googlegroups.com) or [web](https://groups.google.com/forum/?hl=en#!forum/shutterbug-dev)
 2. Fork this project.
