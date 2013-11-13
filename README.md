@@ -106,11 +106,15 @@ some useful things like finding and including all the css on the page, and 'seri
 
 ### Shutterbug JQuery custom events ###
 
-Shutterbug emits a jQuery custom event called 'shutterbug-saycheese' just prior to copying styles, elements, and canvas contents to the document fragment. This allows applications to do any preparation required before they are ready to be snapshotted.
+Shutterbug emits a jQuery custom event called `shutterbug-saycheese` just prior to copying styles, elements, and canvas contents to the document fragment. This allows applications to do any preparation required before they are ready to be snapshotted.
 
-After all elements are copied, emits a 'shutterbug-asyouwere' event, so that any customized preperations can be torn down again.
+In your application, you can register your event-handler like this:
 
-After all elements are copied, emits a 'shutterbug-asyouwere' event.
+      $(window).on('shutterbug-saycheese', function() {
+        api.renderCanvas();
+      });
+
+After all elements are copied, emits a `shutterbug-asyouwere` event.
 
 ### Deploying on Heroku ###
 
