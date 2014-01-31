@@ -1,0 +1,26 @@
+{
+  "name": "shutterbug",
+  "version": "0.1.2",
+  "homepage": "https://github.com/concord-consortium/shutterbug",
+  "authors": [
+    "Noah Paessel <npaessel@concord.org>"
+  ],
+  "description": "Javascript library for facilitating rendering DOM components in rasterized form.",
+  "main": "lib/shutterbug/handlers/shutterbug.js",
+  "dependencies": {
+    "jquery": "1.11.0"
+  },
+  "keywords": [
+    "shutterbug"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "spec",
+    "demo",
+    "images"
+  ]
+}
