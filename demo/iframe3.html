@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+      <title>demo</title>
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+      <script type="text/javascript" src="/shutterbug/shutterbug.js"></script>
+      <link rel="stylesheet" type="text/css" href="main.css"></link>
+      <style type="text/css">
+        #src {
+          color: red;
+          width: 350px;
+          height: 250px;
+        }
+      </style>
+  </head>
+  <body>
+    <div id="src">
+      <p>(iframe that contains other iframes)</p>
+      <iframe src="iframe.html" width="140" height="140"></iframe>
+      <iframe src="iframe2.html" width="140" height="140"></iframe>
+    </div>
+  </div>
+  </body>
+  <script type="text/javascript">
+    $(document).ready(function(e) {
+      new Shutterbug('#src');
+    });
+  </script>
+</html>
