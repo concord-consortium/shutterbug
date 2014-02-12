@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+  <head>
+      <title>demo</title>
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+      <script type="text/javascript" src="/shutterbug/shutterbug.js"></script>
+      <link rel="stylesheet" type="text/css" href="main.css">
+      <style type="text/css">
+        #dst, #dst2 {
+          padding: 0;
+        }
+      </style>
+  </head>
+
+  <body>
+    <div id="src1">
+      <iframe src="iframe3.html" width="400" height="300"></iframe>
+    </div>
+    <button class="shutterbug" data-dst="#dst">Snapshot</button>
+    <div id="dst"></div>
+    
+    <div id="src2">
+      <iframe src="iframe4.html" width="400" height="300"></iframe>
+    </div>
+    <button class="shutterbug2" data-dst="#dst">Snapshot</button>
+    <div id="dst2"></div>
+
+  </body>
+  <script type="text/javascript">
+    $(document).ready(function(e) {
+      var bug  = new Shutterbug("#src1", "#dst");
+      var bug2 = new Shutterbug("#src2", "#dst2", null, "plugh");
+      $("button.shutterbug").click(function(e) {
+        bug.getDomSnapshot();
+      });
+      $("button.shutterbug2").click(function(e) {
+        bug2.getDomSnapshot();
+      });
+    });
+  </script>
+</html>
