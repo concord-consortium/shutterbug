@@ -6,6 +6,22 @@
 
 ## Overview ##
 
+Shutterbug has two parts: a browser javascript library for taking html snapshots, and a server side utility for turning those html snapshots into images.
+
+### Browser Javascript library
+
+By itself `shutterbug.js` is useful for authors of iframe'able content. With `shutterbug.js` on the iframe'd page, the parent window can request an html snapshot even if the iframe'd page is on a different domain. To enable this functionality you need to add the following lines to your iframe'able page:
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script src="shutterbug.js"></script>
+    <script>new Shutterbug('body');</script>
+
+The `shutterbug.js` file is located in this repository: `lib/shutterbug/handlers/shutterbug.js`
+
+`shutterbug.js` also includes the API to talk to the server side utility to generate a image of the html snapshot. See the [Usage section](#usage) below for information.
+
+### Server Side Utility
+
 A rack utility using phantomjs that will create and save images (pngs) from parts of your html's documents current dom. These images become available as public png resources in the rack application. Currently shutterbug supports HTML, SVG and Canvas elements. Here is a sample config.ru file:
 
 
