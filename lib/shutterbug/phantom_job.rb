@@ -60,7 +60,7 @@ module Shutterbug
     end
 
     def rasterize_cl
-      %x[#{self.program} #{self.rasterize_js} #{self.input_path} #{self.output_path} #{@width}*#{@height}]
+      %x[#{self.program} --ignore-ssl-errors=true --ssl-protocol=any #{self.rasterize_js} #{self.input_path} #{self.output_path} #{@width}*#{@height}]
     end
 
     def rasterize
