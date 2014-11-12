@@ -85,6 +85,12 @@ This will replace the contents of `$("#outselector")` with an `<img src="http://
 
 ## Advanced usage
 
+You can specify a failure callback on your shutterbug object. This callback will be invoked when the server response was not 200:
+
+      var shutterbug = new Shutterbug('#sourceselector', '#outselector',optCallbackFn, optIdentifier);
+      shutterbug.setFailureCallback(function(jqXHR, textStatus, errorThrown) {
+        alert("Something went wrong: " + textStatus);
+      });
 
 ### IFrame support
 
@@ -145,7 +151,7 @@ Your app should have a config.ru that looks something like this:
     use Rack::Cors do
       allow do
         origins '*'
-        resource '/shutterbug/*', :headers => :any, :methods => :any
+        resource '/shutterbug/*'', :headers => :any, :methods => [:get, :post, :options]
       end
     end
 
@@ -171,6 +177,11 @@ And a Procfile which looks like this:
 
     web: bundle exec rackup config.ru -p $PORT
 
+## Changes ##
+
+*  November 12, 2014 – v 0.2.5
+    *  Added setFailureCallback to shutterbug.js for gracefully handling ajax failures in some custom way.
+    *  Updated CORS configuration in config.ru to allow [:options] requests.
 
 
 ## TODO: ##
