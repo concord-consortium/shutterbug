@@ -16,7 +16,7 @@ module Shutterbug
 
       def initialize(_config=Configuration.instance())
         @config = _config
-        @javascript = File.read(js_file).gsub(/CONVERT_PATH/,@config.convert_path)
+        @javascript = File.read(js_file).gsub(/URL_PREFIX/, @config.url_prefix)
       end
 
       def handle(helper, req, env)

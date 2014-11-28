@@ -34,10 +34,6 @@ module Shutterbug
       "#{uri_prefix}#{path_prefix}"
     end
 
-    def convert_path
-      "#{url_prefix}/make_snapshot"
-    end
-
     def base_url(req)
       req.POST()['base_url'] ||  req.referrer || "#{req.scheme}://#{req.host_with_port}"
     end

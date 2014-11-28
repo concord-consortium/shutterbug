@@ -3,7 +3,8 @@ module Shutterbug
   class Rackapp
 
     DefaultHandlers = [
-      Shutterbug::Handlers::ConvertHandler ,
+      Shutterbug::Handlers::ConvertHandler,
+      Shutterbug::Handlers::DirectUploadHandler,
       Shutterbug::Handlers::JsFileHandler,
       Shutterbug::Handlers::FileHandlers::PngFile,
       Shutterbug::Handlers::FileHandlers::HtmlFile
@@ -47,8 +48,13 @@ module Shutterbug
       headers['Content-Type']   = type
       headers['Cache-Control']  = 'no-cache' unless cachable
       # content must be enumerable.
-      content = [content] if content.kind_of? String
+      content = [content] unless content.respond_to? 'each'
       return [200, headers, content]
+    end
+
+    def error_response(content, error_code)
+      content = [content] unless content.respond_to? 'each'
+      return [error_code, {}, content]
     end
 
     def log(string)
