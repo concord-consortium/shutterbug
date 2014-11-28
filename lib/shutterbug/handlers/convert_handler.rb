@@ -13,7 +13,7 @@ module Shutterbug
 
       def handle(helper, req, env)
         response_text = convert(req).image_tag
-        helper.good_response(response_text,'text/plain')
+        helper.response(response_text, 'text/plain')
       end
 
       def convert(req)

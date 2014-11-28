@@ -21,11 +21,11 @@ module Shutterbug
       # When S3 is not used, 400 is returned.
       def handle(helper, req, env)
         unless @config.use_s3?
-          return helper.error_response('S3 is not available', 400)
+          return helper.response('S3 is not available', 'text/plain', 400)
         end
 
         object_path = "img-#{SecureRandom.uuid}.png"
-        helper.good_response({
+        helper.response({
           upload_url: put_url(object_path),
           # Manual URL construction, no proper method implemented in FOG.
           # But should be available soon, see: https://github.com/fog/fog/issues/3263

@@ -14,7 +14,7 @@ describe Shutterbug::Handlers::ConvertHandler do
 
   describe "calling phantom" do
     let(:mock_results) { mock }
-    let(:rackapp) { mock(:good_response => true )}
+    let(:rackapp) { mock(:response => true )}
     let(:env)     { mock }
     let(:fake_file)   { mock(:filename => "blub", :url => "glub")}
     let(:mock_fantom) { mock(:cache_key => "1", :html_file => fake_file, :png_file => fake_file) }
@@ -23,7 +23,7 @@ describe Shutterbug::Handlers::ConvertHandler do
     end
     it "should invoke phantom" do
       mock_fantom.should_receive(:rasterize).and_return(mock_results)
-      subject.handle(rackapp,req,env)
+      subject.handle(rackapp, req, env)
     end
   end
 end

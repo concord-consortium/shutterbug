@@ -41,20 +41,14 @@ module Shutterbug
       result || skip(env)
     end
 
-    def good_response(content, type, cachable=true)
+    def response(content, type, status=200, cachable=true)
       headers = {}
       size = content.respond_to?(:bytesize) ? content.bytesize : content.size
       headers['Content-Length'] = size.to_s
       headers['Content-Type']   = type
       headers['Cache-Control']  = 'no-cache' unless cachable
-      # content must be enumerable.
       content = [content] unless content.respond_to? 'each'
-      return [200, headers, content]
-    end
-
-    def error_response(content, error_code)
-      content = [content] unless content.respond_to? 'each'
-      return [error_code, {}, content]
+      return [status, headers, content]
     end
 
     def log(string)

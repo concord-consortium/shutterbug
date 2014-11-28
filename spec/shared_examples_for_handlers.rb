@@ -20,7 +20,7 @@ shared_examples "a request handler" do
   end
   it "should respond to handle" do
     handler.should respond_to :handle
-    rackapp.should_receive :good_response
-    handler.handle(rackapp,req,env)
+    rackapp.should_receive :response
+    handler.handle(rackapp, req, env)
   end
 end

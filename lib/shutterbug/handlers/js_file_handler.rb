@@ -20,7 +20,7 @@ module Shutterbug
       end
 
       def handle(helper, req, env)
-        helper.good_response(@javascript, 'application/javascript')
+        helper.response(@javascript, 'application/javascript')
       end
     end
   end

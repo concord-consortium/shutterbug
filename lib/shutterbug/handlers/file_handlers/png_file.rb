@@ -14,7 +14,7 @@ module Shutterbug
         def handle(helper, req, env)
           local_filename  = regex.match(req.path)[1]
           file = @config.storage.new(local_filename,self)
-          helper.good_response(file.get_content, self.mime_type)
+          helper.response(file.get_content, self.mime_type)
         end
       end
     end

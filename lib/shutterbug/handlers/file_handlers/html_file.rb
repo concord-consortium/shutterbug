@@ -14,7 +14,7 @@ module Shutterbug
         def handle(helper, req, env)
           sha  = regex.match(req.path)[1]
           file = @config.storage.new(filename(sha),self)
-          helper.good_response(file.get_content, self.mime_type)
+          helper.response(file.get_content, self.mime_type)
         end
       end
     end
