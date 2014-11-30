@@ -3,18 +3,18 @@ module Shutterbug
     module FileHandlers
       class HtmlFile < Base
 
-        def file_extension
+        def self.file_extension
           "html"
         end
 
-        def mime_type
+        def self.mime_type
           "text/html"
         end
 
         def handle(helper, req, env)
-          sha  = regex.match(req.path)[1]
-          file = @config.storage.new(filename(sha),self)
-          helper.response(file.get_content, self.mime_type)
+          sha  = self.class.regex.match(req.path)[1]
+          file = self.class.config.storage.new(self.class.filename(sha), self.class)
+          helper.response(file.get_content, self.class.mime_type)
         end
       end
     end

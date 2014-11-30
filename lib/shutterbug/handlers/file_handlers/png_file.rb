@@ -3,21 +3,20 @@ module Shutterbug
     module FileHandlers
       class PngFile < Base
 
-        def file_extension
+        def self.file_extension
           "png"
         end
 
-        def mime_type
+        def self.mime_type
           "image/png"
         end
 
         def handle(helper, req, env)
-          local_filename  = regex.match(req.path)[1]
-          file = @config.storage.new(local_filename,self)
-          helper.response(file.get_content, self.mime_type)
+          local_filename = self.class.regex.match(req.path)[1]
+          file = self.class.config.storage.new(local_filename, self.class)
+          helper.response(file.get_content, self.class.mime_type)
         end
       end
     end
   end
-
 end

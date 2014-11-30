@@ -1,4 +1,5 @@
 require 'shared_examples_for_handlers'
+
 describe Shutterbug::Handlers::ConvertHandler do
   let(:mock_post) do
     mock(:POST => {},

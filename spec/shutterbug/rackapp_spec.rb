@@ -16,7 +16,7 @@ end
 describe Shutterbug::Rackapp do
   include Rack::Test::Methods
 
-  let(:config)    { Shutterbug::Configuration.instance }
+  let(:config) { Shutterbug::Configuration.instance }
 
   let(:post_data) do
     {
@@ -29,16 +29,16 @@ describe Shutterbug::Rackapp do
   end
 
   let(:app) do
-    Shutterbug::Rackapp.new  do |config|
-      config.uri_prefix   = "http://localhost:9292"
-      config.path_prefix  = "/shutterbug"
+    Shutterbug::Rackapp.new do |config|
+      config.uri_prefix  = "http://localhost:9292"
+      config.path_prefix = "/shutterbug"
     end
   end
 
-  let(:filename)  { "filename" }
-  let(:url)       { "url_to_file" }
+  let(:filename) { "filename" }
+  let(:url)      { "url_to_file" }
 
-  let(:mock_file)  do
+  let(:mock_file) do
     mock({
       :get_content => "content",
       :filename => filename,
@@ -46,14 +46,13 @@ describe Shutterbug::Rackapp do
     })
   end
 
-  let(:test_storage) { mock({ :new => mock_file         })}
+  let(:test_storage) { mock({ :new => mock_file })}
 
   before(:each) do
     config.stub!(:storage => test_storage)
   end
 
   describe "routing requests in #call" do
-
     describe "do_convert route" do
       it "should return a valid image url" do
         get "/shutterbug/make_snapshot/", post_data
@@ -74,7 +73,6 @@ describe Shutterbug::Rackapp do
 
     describe "get html route" do
       it "should route #do_get_html" do
-
         get "/shutterbug/get_html/filename.html"
         last_response.should be_ok
         last_response.headers['Content-Type'].should match 'text/html'
@@ -88,7 +86,5 @@ describe Shutterbug::Rackapp do
         last_response.headers['Content-Type'].should match 'application/javascript'
       end
     end
-
   end
-
 end

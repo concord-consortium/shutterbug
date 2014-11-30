@@ -1,7 +1,7 @@
 shared_examples "a storage provider" do
-  let(:filetype) { Shutterbug::Handlers::FileHandlers::HtmlFile.new}
+  let(:file_class) { Shutterbug::Handlers::FileHandlers::HtmlFile }
   let(:filename) { "somefilename.html" }
-  let(:provider) { described_class.new(filename,filetype) }
+  let(:provider) { described_class.new(filename, file_class) }
 
   it "should respond to filename" do
     provider.should respond_to :filename

@@ -5,9 +5,9 @@ module Shutterbug
       attr_accessor :config
       attr_accessor :url
 
-      def initialize(filename, file_handler)
+      def initialize(filename, file_class)
         @filename = Configuration.instance.fs_path_for(filename)
-        @url = file_handler.urlify(filename)
+        @url = file_class.urlify(filename)
       end
 
       def get_content

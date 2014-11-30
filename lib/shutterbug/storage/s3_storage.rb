@@ -51,7 +51,7 @@ module Shutterbug
         return self.handlers[type]
       end
 
-      def initialize(long_path, filetype)
+      def initialize(long_path, file_class)
         @filename = File.basename(long_path)
         @source = long_path
         @stream_file = S3Storage.write(@filename, long_path)

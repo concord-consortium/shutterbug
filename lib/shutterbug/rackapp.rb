@@ -12,9 +12,9 @@ module Shutterbug
 
     attr_accessor :handlers
     def add_handler(klass)
-      instance = klass.new(@config)
-      log "adding handler for #{instance.regex} ➙ #{klass.name}"
-      self.handlers[instance.regex] = instance
+      instance = klass.new
+      log "adding handler for #{klass.regex} ➙ #{klass.name}"
+      self.handlers[klass.regex] = instance
     end
 
     def add_default_handlers
@@ -30,7 +30,7 @@ module Shutterbug
       log "initialized"
     end
 
-    def call env
+    def call(env)
       req      = Rack::Request.new(env)
       result   = false
       handlers.keys.each do |path_regex|
@@ -59,6 +59,5 @@ module Shutterbug
       # call the applicaiton default
       @app.call env if @app
     end
-
   end
 end

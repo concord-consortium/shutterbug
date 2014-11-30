@@ -1,6 +1,4 @@
-
 describe Shutterbug::Configuration do
-
   let(:uri_prefix)       { "http://blah.com/" }
   let(:path_prefix)      { "/shutterbug" }
   let(:resource_dir)     { "resource_dir"}
@@ -19,10 +17,6 @@ describe Shutterbug::Configuration do
       :s3_secret        => s3_secret
     }
   end
-
-
-    # def js_file
-
 
   subject { Shutterbug::Configuration.new(opts) }
 
@@ -56,8 +50,6 @@ describe Shutterbug::Configuration do
     end
   end
 
-
-
   describe "use_s3?" do
     describe "with no S3 information" do
       its(:use_s3?) { should be_false }
@@ -78,6 +70,4 @@ describe Shutterbug::Configuration do
       end
     end
   end
-
-
 end

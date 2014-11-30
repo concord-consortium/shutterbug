@@ -1,38 +1,34 @@
 require 'tmpdir'
+
 module Shutterbug
   module Handlers
     module FileHandlers
       class Base
         attr_accessor :config
 
-        def self.instance
-          return @instance || self.new
+        def self.config
+          Configuration.instance
         end
 
-        def initialize(_config = Configuration.instance)
-          self.config = _config
+        def self.path_prefix
+          "#{self.config.path_prefix}/get_#{self.file_extension}"
         end
 
-        def urlify(name)
+        def self.urlify(name)
           "#{self.config.uri_prefix}#{self.path_prefix}/#{name}"
         end
 
-        def path_prefix
-          "#{self.config.path_prefix}/get_#{file_extension}"
-        end
-
-        def filename_matcher
+        def self.filename_matcher
           "(([^\/|\.]+)\.?([^\/]+))?"
         end
 
-        def regex
-          /#{path_prefix}\/#{filename_matcher}/
+        def self.filename(base)
+          "#{base}.#{self.file_extension}"
         end
 
-        def filename(base)
-          "#{base}.#{file_extension}"
+        def self.regex
+          /#{self.path_prefix}\/#{self.filename_matcher}/
         end
-
       end
     end
   end

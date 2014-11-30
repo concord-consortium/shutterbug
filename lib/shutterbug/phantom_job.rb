@@ -68,8 +68,8 @@ module Shutterbug
         f.write(document)
       end
       rasterize_cl()
-      self.png_file  = @config.storage.new(png_file_name, Shutterbug::Handlers::FileHandlers::PngFile.new)
-      self.html_file = @config.storage.new(html_file_name,  Shutterbug::Handlers::FileHandlers::HtmlFile.new)
+      self.png_file  = @config.storage.new(png_file_name, Shutterbug::Handlers::FileHandlers::PngFile)
+      self.html_file = @config.storage.new(html_file_name,  Shutterbug::Handlers::FileHandlers::HtmlFile)
     end
   end
 end
