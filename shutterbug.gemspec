@@ -35,5 +35,4 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "rack"
   spec.add_dependency "fog"
-
 end

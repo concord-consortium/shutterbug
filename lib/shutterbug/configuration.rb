@@ -1,7 +1,7 @@
 require 'tmpdir'
+
 module Shutterbug
   class Configuration
-
     attr_accessor :uri_prefix
     attr_accessor :path_prefix
     attr_accessor :resource_dir
@@ -27,7 +27,7 @@ module Shutterbug
     end
 
     def fs_path_for(filename)
-      File.join(resource_dir,"phantom_#{filename}")
+      File.join(resource_dir, "phantom_#{filename}")
     end
 
     def url_prefix
@@ -35,7 +35,7 @@ module Shutterbug
     end
 
     def base_url(req)
-      req.POST()['base_url'] ||  req.referrer || "#{req.scheme}://#{req.host_with_port}"
+      req.POST()['base_url'] || req.referrer || "#{req.scheme}://#{req.host_with_port}"
     end
 
     def storage

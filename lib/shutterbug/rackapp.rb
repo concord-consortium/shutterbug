@@ -6,15 +6,13 @@ module Shutterbug
       Shutterbug::Handlers::ConvertHandler,
       Shutterbug::Handlers::DirectUploadHandler,
       Shutterbug::Handlers::JsFileHandler,
-      Shutterbug::Handlers::FileHandlers::PngFile,
-      Shutterbug::Handlers::FileHandlers::HtmlFile
+      Shutterbug::Handlers::FileHandler
     ]
 
-    attr_accessor :handlers
     def add_handler(klass)
       instance = klass.new
       log "adding handler for #{klass.regex} ➙ #{klass.name}"
-      self.handlers[klass.regex] = instance
+      @handlers[klass.regex] = instance
     end
 
     def add_default_handlers
@@ -31,11 +29,11 @@ module Shutterbug
     end
 
     def call(env)
-      req      = Rack::Request.new(env)
-      result   = false
-      handlers.keys.each do |path_regex|
+      req    = Rack::Request.new(env)
+      result = false
+      @handlers.keys.each do |path_regex|
         if req.path =~ path_regex
-          result = handlers[path_regex].handle(self, req, env)
+          result = @handlers[path_regex].handle(self, req, env)
         end
       end
       result || skip(env)
@@ -57,7 +55,7 @@ module Shutterbug
 
     def skip(env)
       # call the applicaiton default
-      @app.call env if @app
+      @app.call(env) if @app
     end
   end
 end

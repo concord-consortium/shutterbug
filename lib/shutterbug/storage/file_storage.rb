@@ -1,20 +1,33 @@
 module Shutterbug
   module Storage
     class FileStorage
-      attr_accessor :filename
-      attr_accessor :config
-      attr_accessor :url
+      attr_reader :filename
+      attr_reader :url
 
-      def initialize(filename, file_class)
+      MIME_TYPES = {
+        '.png'  => 'image/png',
+        '.jpeg' => 'image/jpeg',
+        '.jpg'  => 'image/jpeg',
+        '.html' => 'text/html',
+        ''      => 'text/html'
+      }
+
+      def self.get_url(name)
+        "#{Handlers::FileHandler.uri_prefix}/#{name}"
+      end
+
+      def initialize(filename)
         @filename = Configuration.instance.fs_path_for(filename)
-        @url = file_class.urlify(filename)
+        @url = self.class.get_url(filename)
       end
 
       def get_content
-        file = File.open(@filename, 'r')
-        return file
+        File.open(@filename, 'r')
       end
 
+      def mime_type
+        MIME_TYPES[File.extname(@filename)]
+      end
     end
   end
 end

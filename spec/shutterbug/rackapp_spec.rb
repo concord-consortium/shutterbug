@@ -16,8 +16,6 @@ end
 describe Shutterbug::Rackapp do
   include Rack::Test::Methods
 
-  let(:config) { Shutterbug::Configuration.instance }
-
   let(:post_data) do
     {
       'content'  => "<div class='foo'>foo!</div>",
@@ -41,6 +39,7 @@ describe Shutterbug::Rackapp do
   let(:mock_file) do
     mock({
       :get_content => "content",
+      :mime_type => "image/png",
       :filename => filename,
       :url => url
     })
@@ -49,7 +48,7 @@ describe Shutterbug::Rackapp do
   let(:test_storage) { mock({ :new => mock_file })}
 
   before(:each) do
-    config.stub!(:storage => test_storage)
+    Shutterbug::Configuration.instance.stub!(:storage => test_storage)
   end
 
   describe "routing requests in #call" do
@@ -62,25 +61,16 @@ describe Shutterbug::Rackapp do
       end
     end
 
-    describe "get png route" do
-      it "should route #do_get_png" do
-        Shutterbug::Configuration.instance.stub!(:storage => test_storage)
-        get "/shutterbug/get_png/filename.png"
+    describe "get file route" do
+      it "should return without errors" do
+        get "/shutterbug/get_file/foobar.png"
         last_response.should be_ok
         last_response.headers['Content-Type'].should match 'image/png'
       end
     end
 
-    describe "get html route" do
-      it "should route #do_get_html" do
-        get "/shutterbug/get_html/filename.html"
-        last_response.should be_ok
-        last_response.headers['Content-Type'].should match 'text/html'
-      end
-    end
-
     describe "get shutterbug.js javascipt route" do
-      it "should route #do_get_shutterbug" do
+      it "should return js file" do
         get "/shutterbug/shutterbug.js"
         last_response.should be_ok
         last_response.headers['Content-Type'].should match 'application/javascript'

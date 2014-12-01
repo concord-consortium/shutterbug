@@ -1,17 +1,21 @@
 shared_examples "a storage provider" do
-  let(:file_class) { Shutterbug::Handlers::FileHandlers::HtmlFile }
   let(:filename) { "somefilename.html" }
-  let(:provider) { described_class.new(filename, file_class) }
 
-  it "should respond to filename" do
-    provider.should respond_to :filename
+  describe "class" do
+    it "should respond to get_url(name)" do
+      described_class.should respond_to :get_url
+    end
   end
 
-  it "should respond to url" do
-    provider.should respond_to :url
-  end
+  describe "instance" do
+    let(:instance) { described_class.new(filename) }
 
-  it "should respond to get_content" do
-    provider.should respond_to :get_content
+    it "should respond to filename" do
+      instance.should respond_to :filename
+    end
+
+    it "should respond to url" do
+      instance.should respond_to :url
+    end
   end
 end

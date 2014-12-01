@@ -5,7 +5,6 @@ require 'securerandom'
 module Shutterbug
   module Handlers
     class DirectUploadHandler
-      EXP_TIME = 300 # seconds
 
       def self.config
         Configuration.instance
@@ -15,32 +14,25 @@ module Shutterbug
         /#{self.config.path_prefix}\/img_upload_url/
       end
 
-      # Returns put_url and get_url (that will work after file is uploaded).
+      # Returns put_url and get_url for a new file that should be uploaded by the client.
+      # Of course get_url will work after file is uploaded.
       def handle(helper, req, env)
-        object_path = "img-#{SecureRandom.uuid}.png"
-        if self.class.config.use_s3?
-          put_url = s3_put_url(object_path)
-          # Manual URL construction, no proper method implemented in FOG.
-          # But should be available soon, see: https://github.com/fog/fog/issues/3263
-          get_url = "https://#{self.class.config.s3_bin}.s3.amazonaws.com/#{object_path}"
-        else
-          # not implemented yet
-          return helper.response('PUT not available for file storage, use S3', 'text/plain', 400)
+        object_name = "img-#{SecureRandom.uuid}.png"
+        storage = self.class.config.storage
+        unless storage.respond_to? :put_url
+          return helper.response('direct upload not available', 'text/plain', 400)
+        end
+        unless storage.respond_to? :get_url
+          return helper.response('direct upload not available', 'text/plain', 400)
         end
         helper.response({
-          put_url: put_url,
-          get_url: get_url
+          put_url: storage.put_url(object_name),
+          get_url: storage.get_url(object_name),
         }.to_json, 'application/json')
       end
 
       def s3_put_url(object_path)
-        expiry = (Time.now + EXP_TIME).to_i
-        headers = {}
-        query = {
-          'x-amz-acl' => 'public-read'
-        }
-        options = { path_style: true, query: query }
-        return Storage::S3Storage.connection.put_object_url(self.class.config.s3_bin, object_path, expiry, headers, options)
+
       end
     end
   end

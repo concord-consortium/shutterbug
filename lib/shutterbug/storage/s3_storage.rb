@@ -3,15 +3,16 @@ module Shutterbug
     class S3Storage
       require 'fog'
 
-      attr_accessor :filename
-      attr_accessor :url
-      attr_accessor :stream_file
+      attr_reader :filename
+      attr_reader :url
+
+      PUT_URL_EXP_TIME = 300 # seconds
 
       def self.connect!
         Fog::Storage.new({
-          :provider                 => 'AWS',
-          :aws_access_key_id        => Configuration.instance.s3_key,
-          :aws_secret_access_key    => Configuration.instance.s3_secret
+          :provider              => 'AWS',
+          :aws_access_key_id     => Configuration.instance.s3_key,
+          :aws_secret_access_key => Configuration.instance.s3_secret
         })
       end
 
@@ -29,47 +30,41 @@ module Shutterbug
         @s3_bin ||= self.create_bin
       end
 
-      def self.write(name, filename)
+      def self.write(filename)
         full_path = Configuration.instance.fs_path_for(filename)
         if self.fs_path_exists? full_path
           self.s3_bin.files.create(
-            :key    => name,
+            :key    => filename,
             :body   => File.open(full_path),
             :public => true)
         end
       end
 
-      def self.find(path)
-        self.s3_bin.files.get(path)
+      def self.fs_path_exists?(filename)
+        File.exists?(filename)
       end
 
-      def self.fs_path_exists?(long_path)
-        File.exists? long_path
+      def self.get_url(filename)
+        # Manual URL construction, no proper method implemented in FOG.
+        # But should be available soon, see: https://github.com/fog/fog/issues/3263
+        "https://#{Configuration.instance.s3_bin}.s3.amazonaws.com/#{filename}"
       end
 
-      def self.handler_for(type)
-        return self.handlers[type]
+      def self.put_url(filename)
+        expiry = (Time.now + PUT_URL_EXP_TIME).to_i
+        headers = {}
+        query = {
+          'x-amz-acl' => 'public-read'
+        }
+        options = { path_style: true, query: query }
+        self.connection.put_object_url(Configuration.instance.s3_bin, filename, expiry, headers, options)
       end
 
-      def initialize(long_path, file_class)
-        @filename = File.basename(long_path)
-        @source = long_path
-        @stream_file = S3Storage.write(@filename, long_path)
+      def initialize(filename)
+        @filename = filename
+        @stream_file = S3Storage.write(filename)
         @url = @stream_file.public_url
       end
-
-      def get_content
-        @stream_file.body
-      end
-
-      def size
-        @stream_file.content_length
-      end
-
-      def redirect_s3
-        return [301, {"Location" => self.url}, []]
-      end
-
     end
   end
 end

@@ -7,6 +7,7 @@ shared_examples "a request handler" do
     mock({
       :new => mock({
         :get_content => "content",
+        :mime_type => "text/plain",
         :filename => "file",
         :url => "url"
       })
