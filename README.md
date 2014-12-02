@@ -179,6 +179,9 @@ And a Procfile which looks like this:
 
 ## Changes ##
 
+*  December 2, 2014 – v 0.3.0
+    *  Improved canvas snapshot - data is uploaded directly to S3 from the browser (no PhantomJS rendering).
+
 *  November 12, 2014 – v 0.2.5
     *  Added setFailureCallback to shutterbug.js for gracefully handling ajax failures in some custom way.
     *  Updated CORS configuration in config.ru to allow [:options] requests.
