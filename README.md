@@ -179,6 +179,9 @@ And a Procfile which looks like this:
 
 ## Changes ##
 
+*  December 3, 2014 – v 0.4.0
+    *  Added support of various image formats and quality settings.
+
 *  December 2, 2014 – v 0.3.0
     *  Improved canvas snapshot - data is uploaded directly to S3 from the browser (no PhantomJS rendering).
 
