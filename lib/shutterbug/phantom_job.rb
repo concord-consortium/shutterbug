@@ -1,6 +1,6 @@
 module Shutterbug
   class PhantomJob
-    attr_accessor :png_file
+    attr_accessor :image_file
     attr_accessor :html_file
 
     def program
@@ -48,7 +48,7 @@ module Shutterbug
       "#{cache_key}.html"
     end
 
-    def png_file_name
+    def image_file_name
       "#{cache_key}.#{@format}"
     end
 
@@ -57,7 +57,7 @@ module Shutterbug
     end
 
     def output_path
-      @config.fs_path_for(png_file_name)
+      @config.fs_path_for(image_file_name)
     end
 
     def rasterize_cl
@@ -69,7 +69,7 @@ module Shutterbug
         f.write(document)
       end
       rasterize_cl()
-      self.png_file  = @config.storage.new(png_file_name)
+      self.image_file = @config.storage.new(image_file_name)
       self.html_file = @config.storage.new(html_file_name)
     end
   end

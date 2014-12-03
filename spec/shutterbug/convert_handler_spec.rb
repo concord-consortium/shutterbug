@@ -18,7 +18,7 @@ describe Shutterbug::Handlers::ConvertHandler do
     let(:rackapp) { mock(:response => true )}
     let(:env)     { mock }
     let(:fake_file)   { mock(:filename => "blub", :url => "glub")}
-    let(:mock_fantom) { mock(:cache_key => "1", :html_file => fake_file, :png_file => fake_file) }
+    let(:mock_fantom) { mock(:cache_key => "1", :html_file => fake_file, :image_file => fake_file) }
     before(:each) do
       Shutterbug::PhantomJob.stub!(:new => mock_fantom)
     end

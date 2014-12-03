@@ -47,10 +47,10 @@ module Shutterbug
         unless (cache_entry = config.cache_manager.find(job.cache_key))
           job.rasterize
           html_entry = Shutterbug::CacheManager::CacheEntry.new(job.html_file)
-          png_entry  = Shutterbug::CacheManager::CacheEntry.new(job.png_file)
-          html_entry.preview_url = png_entry.preview_url
+          image_entry = Shutterbug::CacheManager::CacheEntry.new(job.image_file)
+          html_entry.preview_url = image_entry.preview_url
           config.cache_manager.add_entry(html_entry)
-          cache_entry = config.cache_manager.add_entry(png_entry)
+          cache_entry = config.cache_manager.add_entry(image_entry)
         end
         # return the image tag
         return cache_entry
