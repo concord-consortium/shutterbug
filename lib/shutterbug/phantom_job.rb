@@ -11,17 +11,19 @@ module Shutterbug
       File.join(File.dirname(__FILE__),'rasterize.js')
     end
 
-    def initialize(base_url, html, css="", width=1000, height=700)
+    def initialize(base_url, html, css="", width=1000, height=700, format="png", quality=10)
       @base_url = base_url
       @html     = html
       @css      = css
       @width    = width
       @height   = height
+      @format   = format
+      @quality  = quality
       @config   = Configuration.instance
     end
 
     def cache_key
-      @cache_key ||= Digest::SHA1.hexdigest("#{@html}#{@css}#{@base_url}")[0..10]
+      @cache_key ||= Digest::SHA1.hexdigest("#{@html}#{@css}#{@base_url}#{@format}#{@quality}")[0..10]
     end
 
     def document
@@ -47,7 +49,7 @@ module Shutterbug
     end
 
     def png_file_name
-      "#{cache_key}.png"
+      "#{cache_key}.#{@format}"
     end
 
     def input_path
@@ -59,7 +61,7 @@ module Shutterbug
     end
 
     def rasterize_cl
-      %x[#{self.program} --ignore-ssl-errors=true --ssl-protocol=any #{self.rasterize_js} #{self.input_path} #{self.output_path} #{@width}*#{@height}]
+      %x[#{self.program} --ignore-ssl-errors=true --ssl-protocol=any #{self.rasterize_js} #{self.input_path} #{self.output_path} #{@width}*#{@height} #{@quality}]
     end
 
     def rasterize

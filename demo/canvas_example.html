@@ -27,7 +27,7 @@
       };
       img.src = "The_Scream.jpg";
 
-      var bug = new Shutterbug("#src", "#dst");
+      var bug = new Shutterbug("#src", "#dst", null, null, null, {format: "jpeg", quality: 0.75});
       $("button.shutterbug").click(function(e) {
         bug.getDomSnapshot();
       });

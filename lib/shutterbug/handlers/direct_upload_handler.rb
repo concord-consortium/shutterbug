@@ -13,7 +13,9 @@ module Shutterbug
       # Returns put_url and get_url for a new file that should be uploaded by the client.
       # Of course get_url will work after file is uploaded.
       def handle(helper, req, env)
-        object_name = "img-#{SecureRandom.uuid}.png"
+        format = req.GET()['format'] || 'png'
+
+        object_name = "img-#{SecureRandom.uuid}.#{format}"
         storage = Configuration.instance.storage
         unless storage.respond_to? :put_url
           return helper.response('direct upload not available', 'text/plain', 400)
