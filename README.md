@@ -179,7 +179,7 @@ And a Procfile which looks like this:
 
 ## Changes ##
 
-*  December 3, 2014 – v 0.4.1
+*  December 3, 2014 – v 0.4.2
     *  Added support of various image formats and quality settings.
 
 *  December 2, 2014 – v 0.3.0
