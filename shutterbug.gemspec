@@ -6,8 +6,8 @@ require 'shutterbug'
 Gem::Specification.new do |spec|
   spec.name          = "shutterbug"
   spec.version       = Shutterbug::VERSION
-  spec.authors       = ["Noah Paessel"]
-  spec.email         = ["knowuh@gmail.com"]
+  spec.authors       = ["Noah Paessel", "Piotr Janik"]
+  spec.email         = ["knowuh@gmail.com","janikpiotrek@gmail.com"]
 
   spec.description   = %q{
     A rack utility that will create and save images (pngs)
