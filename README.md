@@ -94,6 +94,9 @@ And a Procfile which looks like this:
 
 ## Changes ##
 
+*  December 11, 2014 – v 0.5.0
+    *  JS lib, JS handler and demos removed (as they are part of the new [shutterbug.js](https://github.com/concord-consortium/shutterbug.js) repo now).
+
 *  December 4, 2014 – v 0.4.3
     *  Added support of various image formats and quality settings.
 

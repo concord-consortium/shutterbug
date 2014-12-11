@@ -11,14 +11,32 @@ module Shutterbug
       File.join(File.dirname(__FILE__),'rasterize.js')
     end
 
-    def initialize(base_url, html, css="", width=1000, height=700, format="png", quality=10)
+    def convert_quality(val, format)
+      # Client sends quality between 0 and 1 (similar to .toDataURL() second argument).
+      # This conversion tries to ensure that the size of the final image is similar to
+      # .toDataURL() output with given quality settings.
+      val = val.to_f
+      case format
+      when "png"
+        val *= 10
+      when "jpeg"
+        val *= 100
+      else
+        val *= 100
+      end
+      # PhantomJS expects integer.
+      val.to_i
+    end
+
+    def initialize(base_url, options)
       @base_url = base_url
-      @html     = html
-      @css      = css
-      @width    = width
-      @height   = height
-      @format   = format
-      @quality  = quality
+      @html     = options[:html]    || ""
+      @css      = options[:css]     || ""
+      @width    = options[:width]   || 1000
+      @height   = options[:height]  || 700
+      @format   = options[:format]  || "png"
+      @quality  = options[:quality] || 1
+      @quality  = convert_quality(@quality, @format)
       @config   = Configuration.instance
     end
 

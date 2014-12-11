@@ -5,7 +5,6 @@ module Shutterbug
     DefaultHandlers = [
       Shutterbug::Handlers::ConvertHandler,
       Shutterbug::Handlers::DirectUploadHandler,
-      Shutterbug::Handlers::JsFileHandler,
       Shutterbug::Handlers::FileHandler
     ]
 

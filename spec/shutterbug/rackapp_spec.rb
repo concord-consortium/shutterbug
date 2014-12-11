@@ -68,13 +68,5 @@ describe Shutterbug::Rackapp do
         last_response.headers['Content-Type'].should match 'image/png'
       end
     end
-
-    describe "get shutterbug.js javascipt route" do
-      it "should return js file" do
-        get "/shutterbug/shutterbug.js"
-        last_response.should be_ok
-        last_response.headers['Content-Type'].should match 'application/javascript'
-      end
-    end
   end
 end

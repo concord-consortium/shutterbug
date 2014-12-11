@@ -1,9 +1,0 @@
-div {
-  font-weight: bold;
-  font-family: sans-serif;
-  min-width: 100px;
-  min-height: 100px;
-  border: 1px solid black;
-  overflow: hidden;
-  padding: 10px;
-}
