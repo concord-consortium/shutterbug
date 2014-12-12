@@ -14,6 +14,7 @@ use Shutterbug::Rackapp do |config|
   config.s3_key       = ENV['S3_KEY']
   config.s3_secret    = ENV['S3_SECRET']
   config.s3_bin       = "ccshutterbugtest"
+  # config.skip_direct_upload = true  
 end
 
 app = Rack::Directory.new "demo"

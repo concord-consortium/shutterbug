@@ -10,6 +10,7 @@ module Shutterbug
     attr_accessor :s3_key
     attr_accessor :s3_secret
     attr_accessor :cache_manager
+    attr_accessor :skip_direct_upload
 
     def self.instance(opts={})
       return @instance || @instance = self.new(opts)
@@ -24,6 +25,7 @@ module Shutterbug
       self.s3_key           = opts[:s3_key]
       self.s3_secret        = opts[:s3_secret]
       self.cache_manager    = opts[:cache_manager]    || Shutterbug::CacheManager::NoCache.new
+      self.skip_direct_upload = opts[:skip_direct_upload]
     end
 
     def fs_path_for(filename)
