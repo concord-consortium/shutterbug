@@ -47,11 +47,8 @@ Or install it yourself as:
 
 ## License ##
 
-* [Simplified BSD](http://www.opensource.org/licenses/BSD-2-Clause),
-* [MIT](http://www.opensource.org/licenses/MIT), or
-* [Apache 2.0](http://www.opensource.org/licenses/Apache-2.0).
+Shutterbug is Copyright 2012 © by the Concord Consortium and is distributed under the [MIT License](LICENSE.md).
 
-See [LICENSE.md](LICENSE.md) for more information.
 
 ### Deploying on Heroku ###
 
