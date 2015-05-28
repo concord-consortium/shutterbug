@@ -91,6 +91,13 @@ And a Procfile which looks like this:
 
 ## Changes ##
 
+*  May 28, 2015 – v 0.5.2
+    *  Rasterize.js: "Loads an html page and does a depth-first walk of its
+    iframes. As the walk returns to the root each iframe's src is set to the
+    base64 png rendering of its contents."  The purpose of this change was to  
+    allow SVG document relative resource links (such as gradients) to work,  
+    this required the removal of the base tag to work in Phantom 2.
+
 *  December 11, 2014 – v 0.5.0
     *  JS lib, JS handler and demos removed (as they are part of the new [shutterbug.js](https://github.com/concord-consortium/shutterbug.js) repo now).
 
