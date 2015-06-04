@@ -91,8 +91,14 @@ And a Procfile which looks like this:
 
 ## Changes ##
 
+* June 4, 2105 – v 0.5.3
+    * `Rasterize.js`: Also loads non-base64 encoded iframe src content when walking
+    the iFrames. Also, better mechanics for waiting for page rendering.
+    * `s3_storage.rb`: Look for existing S3 bucket using `get`, to avoid 404 errors
+    when bucket limit of 100 is hit. (github issue #15)
+
 *  May 28, 2015 – v 0.5.2
-    *  Rasterize.js: "Loads an html page and does a depth-first walk of its
+    *  `Rasterize.js`: "Loads an html page and does a depth-first walk of its
     iframes. As the walk returns to the root each iframe's src is set to the
     base64 png rendering of its contents."  The purpose of this change was to  
     allow SVG document relative resource links (such as gradients) to work,  
