@@ -26,8 +26,12 @@ module Shutterbug
           :public => true)
       end
 
+      def self.lookup_bin
+        self.connection.directories.get(Configuration.instance.s3_bin) || self.create_bin
+      end
+
       def self.s3_bin
-        @s3_bin ||= self.create_bin
+        @s3_bin ||= self.lookup_bin
       end
 
       def self.write(filename)
