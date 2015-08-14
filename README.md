@@ -91,6 +91,15 @@ And a Procfile which looks like this:
 
 ## Changes ##
 
+*  August 14, 2015 – v 0.5.4
+  * Fix single quote encoding issue in phantom_job.rb. DM:
+  > Phantom's html entity decoder borks on single quotes when you have an
+  encoded  block with single quotes embedded in another encoded block with
+  single quotes. The decoder will decode correctly up to the first single quote
+  but then will leave the rest of the string encoded. If the single quotes are
+  changed to double quotes then they are properly encoded within the enclosing
+  block.
+
 * June 4, 2105 – v 0.5.3
     * `Rasterize.js`: Also loads non-base64 encoded iframe src content when walking
     the iFrames. Also, better mechanics for waiting for page rendering.
