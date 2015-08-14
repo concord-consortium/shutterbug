@@ -50,8 +50,8 @@ module Shutterbug
       <!DOCTYPE html>
       <html>
         <head>
-          <base href='#{@base_url}'>
-          <meta content='text/html;charset=utf-8' http-equiv='Content-Type'>
+          <base href=\"#{@base_url}\">
+          <meta content=\"text/html;charset=utf-8\" http-equiv=\"Content-Type\">
           <title>content from #{@base_url} #{date}</title>
           #{@css}
         </head>
