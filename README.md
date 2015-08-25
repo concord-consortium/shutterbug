@@ -91,6 +91,9 @@ And a Procfile which looks like this:
 
 ## Changes ##
 
+*  August 25, 2015 – v 0.5.5
+  * More aggressive single quote replacement in phantom_job.rb
+
 *  August 14, 2015 – v 0.5.4
   * Fix single quote encoding issue in phantom_job.rb. DM:
   > Phantom's html entity decoder borks on single quotes when you have an
