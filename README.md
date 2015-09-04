@@ -91,6 +91,12 @@ And a Procfile which looks like this:
 
 ## Changes ##
 
+*  September 4, 2015 – v 0.5.6
+  * Prevent some iFrame data-url decoding problems by inserting **magical "#"**.
+    For reasons we don't yet understand, iframes with base hrefs without hash (#)
+    symbols can sometimes cause the data-urls to decode incorrectly. Our
+    Longterm solution will be to base64 encode iFrame data-urls.
+
 *  August 25, 2015 – v 0.5.5
   * More aggressive single quote replacement in phantom_job.rb
 
