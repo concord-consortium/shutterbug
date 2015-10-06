@@ -91,8 +91,10 @@ And a Procfile which looks like this:
 
 ## Changes ##
 
-*  October 6, 2015 – v 0.5.7
+*  October 6, 2015 – v 0.5.8
   * Add error_trigger handler, to verify exception reporting.
+  * Remove Ruby 1.9x travis tests, because of Fog and Net-SSH deps on Ruby 2.0
+
 
 *  September 4, 2015 – v 0.5.6
   * Prevent some iFrame data-url decoding problems by inserting **magical "#"**.
