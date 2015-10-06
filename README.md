@@ -91,6 +91,9 @@ And a Procfile which looks like this:
 
 ## Changes ##
 
+*  October 6, 2015 – v 0.5.7
+  * Add error_trigger handler, to verify exception reporting.
+
 *  September 4, 2015 – v 0.5.6
   * Prevent some iFrame data-url decoding problems by inserting **magical "#"**.
     For reasons we don't yet understand, iframes with base hrefs without hash (#)

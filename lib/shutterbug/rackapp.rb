@@ -5,7 +5,8 @@ module Shutterbug
     DefaultHandlers = [
       Shutterbug::Handlers::ConvertHandler,
       Shutterbug::Handlers::DirectUploadHandler,
-      Shutterbug::Handlers::FileHandler
+      Shutterbug::Handlers::FileHandler,
+      Shutterbug::Handlers::ErrorTrigger
     ]
 
     def add_handler(klass)
