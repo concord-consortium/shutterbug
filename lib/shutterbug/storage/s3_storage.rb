@@ -73,9 +73,12 @@ module Shutterbug
 
       def initialize(filename)
         @filename = filename
-        @stream_file = S3Storage.write(filename)
-        @url = @stream_file.public_url
-        unlink(filename)
+        begin
+          @stream_file = S3Storage.write(filename)
+          @url = @stream_file.public_url
+        ensure
+          unlink(filename)
+        end
       end
     end
   end
