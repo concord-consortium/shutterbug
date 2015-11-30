@@ -1,3 +1,4 @@
+require 'fileutils'
 module Shutterbug
   module Storage
     class S3Storage
@@ -64,10 +65,17 @@ module Shutterbug
         self.connection.put_object_url(Configuration.instance.s3_bin, filename, expiry, headers, options)
       end
 
+      def unlink(filename)
+        if File.exists? filename
+          FileUtils.rm(filename)
+        end
+      end
+
       def initialize(filename)
         @filename = filename
         @stream_file = S3Storage.write(filename)
         @url = @stream_file.public_url
+        unlink(filename)
       end
     end
   end
