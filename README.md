@@ -91,6 +91,9 @@ And a Procfile which looks like this:
 
 ## Changes ##
 
+* December 3, 2015 – v 0.5.9
+  * S3 storage provider explicitly removes temporary files.
+  
 *  October 6, 2015 – v 0.5.8
   * Add error_trigger handler, to verify exception reporting.
   * Remove Ruby 1.9x travis tests, because of Fog and Net-SSH deps on Ruby 2.0
